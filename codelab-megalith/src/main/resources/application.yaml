@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: codelab
+  datasource:
+    url: jdbc:postgresql://localhost:5432/codelab
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: false
+logging:
+  level:
+    org.hibernate.tool.schema: DEBUG
+springdoc:
+  api-docs:
+    path: /api-docs
+
+  swagger-ui:
+    path: /swagger-ui

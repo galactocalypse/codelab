@@ -1,0 +1,40 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+}
+
+group = 'com.codelab'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+gradlePlugin {
+    plugins {
+        codelab {
+            id = 'com.codelab.gradle'
+            implementationClass = 'com.codelab.gradle.CodelabGradlePlugin'
+        }
+
+        codelabSettings {
+            id = 'com.codelab.settings'
+            implementationClass = 'com.codelab.gradle.CodelabSettingsPlugin'
+        }
+    }
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.1.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}

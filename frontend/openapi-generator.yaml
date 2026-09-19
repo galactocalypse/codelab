@@ -1,0 +1,7 @@
+generatorName: typescript-fetch
+inputSpec: http://localhost:8080/api-docs
+outputDir: src/generated
+
+additionalProperties:
+  supportsES6: true
+  npmName: "@codelab/api"

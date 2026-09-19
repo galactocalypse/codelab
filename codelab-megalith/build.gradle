@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'com.codelab.gradle'
+}
+
+group = 'com.codelab'
+version = '1.0.0'
+description = 'Codelab Megalith'
+
+dependencies {
+    implementation platform("com.codelab:codelab-bom:1.0.0")
+    annotationProcessor platform("com.codelab:codelab-bom:1.0.0")
+    testAnnotationProcessor platform("com.codelab:codelab-bom:1.0.0")
+
+    implementation 'com.codelab:codelab-movies'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    implementation 'org.apache.kafka:kafka-streams'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+test {
+    useJUnitPlatform()
+}

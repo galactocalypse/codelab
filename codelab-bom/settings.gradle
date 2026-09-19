@@ -1,0 +1,9 @@
+pluginManagement {
+    includeBuild('../codelab-gradle')
+}
+
+plugins {
+    id 'com.codelab.settings'
+}
+
+rootProject.name = 'codelab-bom'
