@@ -1,6 +1,8 @@
-package com.codelab.movies;
+package com.codelab.movies.service;
 
+import com.codelab.movies.model.CreateMovieCreditRequest;
 import com.codelab.movies.entity.MovieCredit;
+import com.codelab.movies.model.MovieCreditDto;
 import com.codelab.movies.repository.MovieCreditRepository;
 import com.codelab.movies.repository.MovieRepository;
 import com.codelab.movies.repository.MovieRoleRepository;
@@ -19,22 +21,22 @@ public class MovieCreditService {
     private final MovieRoleRepository roleRepository;
     private final PersonRepository personRepository;
 
-    public List<MovieCredit> getAllByMovieId(Long id) {
-        return repository.findByMovie_Id(id);
+    public List<MovieCreditDto> getAllByMovieId(Long id) {
+        return repository.findByMovie_Id(id).stream().map(MovieCreditDto::fromGetByMovieIdEntity).toList();
     }
 
-    public List<MovieCredit> getAllByPersonId(Long id) {
-        return repository.findByPerson_Id(id);
+    public List<MovieCreditDto> getAllByPersonId(Long id) {
+        return repository.findByPerson_Id(id).stream().map(MovieCreditDto::fromGetByPersonIdEntity).toList();
     }
 
-    public MovieCredit create(CreateMovieCreditRequest request) {
+    public MovieCreditDto create(CreateMovieCreditRequest request) {
         MovieCredit credit = new MovieCredit();
 
         credit.setMovie(movieRepository.getReferenceById(request.getMovieId()));
         credit.setPerson(personRepository.getReferenceById(request.getPersonId()));
         credit.setRole(roleRepository.getReferenceById(request.getRoleId()));
 
-        return repository.save(credit);
+        return MovieCreditDto.fromCreatedEntity(repository.save(credit));
     }
 
 }

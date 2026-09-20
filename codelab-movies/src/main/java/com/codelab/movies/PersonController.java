@@ -1,5 +1,9 @@
 package com.codelab.movies;
 
+import com.codelab.movies.entity.Person;
+import com.codelab.movies.model.CreatePersonRequest;
+import com.codelab.movies.model.PersonDto;
+import com.codelab.movies.service.PersonService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +19,18 @@ public class PersonController {
     private final PersonService service;
 
     @GetMapping
-    public List<Person> getAll() {
+    public List<PersonDto> getAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public Person getById(@PathVariable("id") Long id) {
+    public PersonDto getById(@PathVariable("id") Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public Person create(@RequestBody Person person) {
-        return service.create(person);
+    public PersonDto create(@RequestBody CreatePersonRequest person) {
+        return service.create(person.toEntity());
     }
 
 }

@@ -1,4 +1,4 @@
-package com.codelab.movies;
+package com.codelab.movies.repository;
 
 import com.codelab.movies.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,5 +1,7 @@
 package com.codelab.movies.entity;
 
+import com.codelab.movies.model.MovieDto;
+import com.codelab.movies.model.PersonDto;
 import jakarta.persistence.*;
 import lombok.Data;
 

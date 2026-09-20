@@ -9,8 +9,10 @@ description = 'Codelab Movies'
 
 
 dependencies {
-    implementation platform("com.codelab:codelab-bom:1.0.0")
-    annotationProcessor platform("com.codelab:codelab-bom:1.0.0")
+    implementation platform('com.codelab:codelab-bom:1.0.0')
+    annotationProcessor platform('com.codelab:codelab-bom:1.0.0')
+    testAnnotationProcessor platform('com.codelab:codelab-bom:1.0.0')
+    implementation 'com.codelab:codelab-commons'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

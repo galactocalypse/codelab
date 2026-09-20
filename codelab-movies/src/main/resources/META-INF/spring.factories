@@ -1,0 +1,3 @@
+# codelab-movies/src/main/resources/META-INF/spring.factories
+com.codelab.common.spring.persistence.CodelabModuleProvider=\
+com.codelab.movies.autoconfigure.MoviesModuleProvider

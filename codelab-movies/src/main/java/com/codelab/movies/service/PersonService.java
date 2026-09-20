@@ -1,6 +1,7 @@
-package com.codelab.movies;
+package com.codelab.movies.service;
 
 import com.codelab.movies.entity.Person;
+import com.codelab.movies.model.PersonDto;
 import com.codelab.movies.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,17 @@ public class PersonService {
 
     private final PersonRepository repository;
     
-    public List<Person> getAll() {
-        return repository.findAll();
+    public List<PersonDto> getAll() {
+        return repository.findAll().stream().map(PersonDto::from).toList();
     }
 
-    public Person getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Person not found"));
+    public PersonDto getById(Long id) {
+        return PersonDto.from(repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Person not found")));
     }
 
-    public Person create(Person Person) {
-        return repository.save(Person);
+    public PersonDto create(Person Person) {
+        return PersonDto.from(repository.save(Person));
     }
+
 }

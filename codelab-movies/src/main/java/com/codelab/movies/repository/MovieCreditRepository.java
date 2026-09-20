@@ -1,4 +1,4 @@
-package com.codelab.movies;
+package com.codelab.movies.repository;
 
 import com.codelab.movies.entity.MovieCredit;
 import org.springframework.data.jpa.repository.EntityGraph;

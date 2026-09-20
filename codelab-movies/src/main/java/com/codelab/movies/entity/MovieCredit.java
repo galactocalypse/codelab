@@ -1,7 +1,13 @@
 package com.codelab.movies.entity;
 
+import com.codelab.movies.model.MovieCreditDto;
+import com.codelab.movies.model.MovieDto;
+import com.codelab.movies.model.MovieRoleDto;
+import com.codelab.movies.model.PersonDto;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Optional;
 
 @Data
 @Entity
@@ -31,5 +37,6 @@ public class MovieCredit {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     private MovieRole role;
+
 
 }

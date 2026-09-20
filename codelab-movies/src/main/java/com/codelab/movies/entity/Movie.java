@@ -1,8 +1,11 @@
 package com.codelab.movies.entity;
 
 
+import com.codelab.movies.model.MovieDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -15,6 +18,5 @@ public class Movie {
 
     @Column(nullable = false)
     private String name;
-
 
 }

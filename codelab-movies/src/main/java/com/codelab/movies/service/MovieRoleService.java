@@ -1,6 +1,8 @@
-package com.codelab.movies;
+package com.codelab.movies.service;
 
 import com.codelab.movies.entity.MovieRole;
+import com.codelab.movies.model.CreateMovieRoleRequest;
+import com.codelab.movies.model.MovieRoleDto;
 import com.codelab.movies.repository.MovieRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,17 +15,17 @@ public class MovieRoleService {
 
     private final MovieRoleRepository repository;
 
-    public List<MovieRole> getAll() {
-        return repository.findAll();
+    public List<MovieRoleDto> getAll() {
+        return repository.findAll().stream().map(MovieRoleDto::from).toList();
     }
 
-    public MovieRole getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movie role not found"));
+    public MovieRoleDto getById(Long id) {
+        return MovieRoleDto.from(repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movie role not found")));
     }
 
-    public MovieRole create(MovieRole role) {
-        return repository.save(role);
+    public MovieRoleDto create(CreateMovieRoleRequest role) {
+        return MovieRoleDto.from(repository.save(role.toEntity()));
     }
 
 }

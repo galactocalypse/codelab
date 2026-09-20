@@ -1,14 +1,14 @@
 package com.codelab.movies.autoconfigure;
 
 import com.codelab.movies.*;
+import com.codelab.movies.service.MovieCreditService;
+import com.codelab.movies.service.MovieRoleService;
+import com.codelab.movies.service.MovieService;
+import com.codelab.movies.service.PersonService;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @AutoConfiguration
-@EntityScan(basePackageClasses = {Movie.class, Person.class, MovieCredit.class, MovieRole.class})
-@EnableJpaRepositories(basePackageClasses = MovieRepository.class)
 @Import({
         MovieController.class,
         MovieCreditController.class,

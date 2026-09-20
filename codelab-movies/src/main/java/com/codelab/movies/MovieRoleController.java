@@ -1,5 +1,9 @@
 package com.codelab.movies;
 
+import com.codelab.movies.entity.MovieRole;
+import com.codelab.movies.model.CreateMovieRoleRequest;
+import com.codelab.movies.model.MovieRoleDto;
+import com.codelab.movies.service.MovieRoleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +19,17 @@ public class MovieRoleController {
     private final MovieRoleService service;
 
     @GetMapping
-    public List<MovieRole> getAll() {
+    public List<MovieRoleDto> getAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public MovieRole getById(@PathVariable("id") Long id) {
+    public MovieRoleDto getById(@PathVariable("id") Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public MovieRole create(@RequestBody MovieRole role) {
+    public MovieRoleDto create(@RequestBody CreateMovieRoleRequest role) {
         return service.create(role);
     }
 
