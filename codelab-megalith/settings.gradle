@@ -7,5 +7,6 @@ plugins {
 }
 
 includeBuild('../codelab-movies')
+includeBuild('../codelab-commons')
 
 rootProject.name = 'codelab-megalith'
