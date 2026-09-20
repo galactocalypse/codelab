@@ -1,12 +1,13 @@
-package com.codelab.movies;
+package com.codelab.movies.entity;
+
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "persons")
-public class Person {
+@Table(name = "movies")
+public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,5 +15,6 @@ public class Person {
 
     @Column(nullable = false)
     private String name;
+
 
 }

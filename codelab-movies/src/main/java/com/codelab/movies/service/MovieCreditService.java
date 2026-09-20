@@ -1,5 +1,10 @@
 package com.codelab.movies;
 
+import com.codelab.movies.entity.MovieCredit;
+import com.codelab.movies.repository.MovieCreditRepository;
+import com.codelab.movies.repository.MovieRepository;
+import com.codelab.movies.repository.MovieRoleRepository;
+import com.codelab.movies.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

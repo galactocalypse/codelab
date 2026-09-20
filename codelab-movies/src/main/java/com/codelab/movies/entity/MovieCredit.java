@@ -1,4 +1,4 @@
-package com.codelab.movies;
+package com.codelab.movies.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
