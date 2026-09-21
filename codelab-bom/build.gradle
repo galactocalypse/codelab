@@ -13,9 +13,11 @@ javaPlatform {
 
 def springBootVersion = '4.1.1'
 def codelabVersion = '1.0.0'
+def lombokVersion = '1.18.46'
 
 dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    api "org.projectlombok:lombok:${lombokVersion}"
     api "com.codelab:codelab-commons:${codelabVersion}"
     constraints {
         api "com.codelab:codelab-commons:${codelabVersion}"
