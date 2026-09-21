@@ -1,4 +1,4 @@
-package com.codelab.core;
+package com.codelab.megalith;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.hibernate.autoconfigure.HibernateProperties;
