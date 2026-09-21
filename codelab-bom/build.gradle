@@ -12,7 +12,12 @@ javaPlatform {
 }
 
 def springBootVersion = '4.1.1'
+def codelabVersion = '1.0.0'
 
 dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    api "com.codelab.codelab-commons:${codelabVersion}"
+    constraints {
+        api "com.codelab:codelab-commons:${codelabVersion}"
+    }
 }

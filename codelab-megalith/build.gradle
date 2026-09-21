@@ -12,8 +12,8 @@ dependencies {
     implementation platform('com.codelab:codelab-bom:1.0.0')
     annotationProcessor platform('com.codelab:codelab-bom:1.0.0')
     testAnnotationProcessor platform('com.codelab:codelab-bom:1.0.0')
-    implementation 'com.codelab:codelab-commons'
-    implementation 'com.codelab:codelab-movies'
+    implementation 'com.codelab:codelab-commons:1.0.0'
+    implementation 'com.codelab:codelab-movies:1.0.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

@@ -9,14 +9,6 @@ public class CodelabSettingsPlugin implements Plugin<Settings> {
   public void apply(Settings settings) {
     settings
         .getPluginManagement()
-        .repositories(
-            repositories -> {
-              repositories.gradlePluginPortal();
-              repositories.mavenCentral();
-              repositories.mavenLocal();
-            });
-    settings
-        .getPluginManagement()
         .plugins(
             plugins -> {
               plugins.id("org.springframework.boot").version("4.1.1");

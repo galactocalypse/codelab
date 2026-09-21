@@ -5,6 +5,7 @@ plugins {
 
 group = 'com.codelab'
 version = '1.0.0'
+description = 'Codelab Commons'
 
 dependencies {
     implementation platform("com.codelab:codelab-bom:1.0.0")

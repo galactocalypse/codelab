@@ -54,12 +54,18 @@ public class CodelabGradlePlugin implements Plugin<Project> {
         .getPluginManager()
         .withPlugin(
             "maven-publish",
-            ignored ->
-                project
-                    .getPluginManager()
-                    .withPlugin(
-                        "java-platform",
-                        javaPlatformPlugin -> configurePublishing(project, extension)));
+            ignored -> {
+              project
+                  .getPluginManager()
+                  .withPlugin(
+                      "java-platform",
+                      javaPlatformPlugin -> configureJavaPlatformPublishing(project, extension));
+              project
+                  .getPluginManager()
+                  .withPlugin(
+                      "java",
+                      javaPlatformPlugin -> configureJavaPublishing(project, extension));
+            });
     project
         .getTasks()
         .withType(JavaCompile.class)
@@ -67,7 +73,27 @@ public class CodelabGradlePlugin implements Plugin<Project> {
     project.getPluginManager().apply(CodelabJavaQualityPlugin.class);
   }
 
-  private void configurePublishing(Project project, CodelabBuildExtension extension) {
+  private void configureJavaPublishing(Project project, CodelabBuildExtension extension) {
+
+    PublishingExtension publishing = project.getExtensions().getByType(PublishingExtension.class);
+
+    publishing.getRepositories().mavenLocal();
+
+    publishing
+        .getPublications()
+        .create(
+            "maven",
+            MavenPublication.class,
+            publication -> {
+              publication.from(project.getComponents().getByName("java"));
+
+              configurePom(project, publication, extension);
+            });
+
+    project.afterEvaluate(ignored -> validatePublishingInformation(project, extension));
+  }
+
+  private void configureJavaPlatformPublishing(Project project, CodelabBuildExtension extension) {
     PublishingExtension publishing = project.getExtensions().getByType(PublishingExtension.class);
 
     // Publishing destination is part of the convention.

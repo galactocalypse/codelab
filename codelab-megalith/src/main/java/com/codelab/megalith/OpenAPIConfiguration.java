@@ -1,4 +1,4 @@
-package com.codelab.core;
+package com.codelab.megalith;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

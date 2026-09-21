@@ -1,5 +1,6 @@
-package com.codelab.core;
+package com.codelab.megalith;
 
+import com.codelab.core.CodelabModuleRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

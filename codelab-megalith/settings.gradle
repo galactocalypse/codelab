@@ -1,12 +1,5 @@
-pluginManagement {
-    includeBuild('../codelab-gradle')
-}
-
 plugins {
-    id 'com.codelab.settings'
+    id 'com.codelab.settings' version '1.0.0'
 }
-
-includeBuild('../codelab-movies')
-includeBuild('../codelab-commons')
 
 rootProject.name = 'codelab-megalith'
