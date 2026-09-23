@@ -17,9 +17,10 @@ def lombokVersion = '1.18.46'
 
 dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-    api "org.projectlombok:lombok:${lombokVersion}"
-    api "com.codelab:codelab-commons:${codelabVersion}"
     constraints {
         api "com.codelab:codelab-commons:${codelabVersion}"
+        api "org.projectlombok:lombok:${lombokVersion}"
+        api "com.codelab:codelab-commons:${codelabVersion}"
+        api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1'
     }
 }
