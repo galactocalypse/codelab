@@ -1,4 +1,4 @@
-package com.codelab.core;
+package com.codelab.core.jpa;
 
 import com.codelab.common.spring.persistence.CodelabModule;
 import org.jspecify.annotations.NullMarked;
@@ -13,8 +13,6 @@ import org.springframework.data.util.Streamable;
 
 import java.util.Optional;
 
-import static com.codelab.core.CodelabModuleRegistrar.emfBeanName;
-import static com.codelab.core.CodelabModuleRegistrar.txBeanName;
 
 @NullMarked
 final class CodelabJpaRepositoryConfigurationSource
@@ -56,10 +54,10 @@ final class CodelabJpaRepositoryConfigurationSource
 
         return switch (name) {
             case "entityManagerFactoryRef" ->
-                    Optional.of(type.cast(emfBeanName(module)));
+                    Optional.of(type.cast(JpaBeanNaming.emfBeanName(module)));
 
             case "transactionManagerRef" ->
-                    Optional.of(type.cast(txBeanName(module)));
+                    Optional.of(type.cast(JpaBeanNaming.txBeanName(module)));
 
             default ->
                     super.getAttribute(name, type);

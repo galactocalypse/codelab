@@ -1,4 +1,4 @@
-package com.codelab.core;
+package com.codelab.core.jpa;
 
 import java.net.URI;
 import java.net.URISyntaxException;

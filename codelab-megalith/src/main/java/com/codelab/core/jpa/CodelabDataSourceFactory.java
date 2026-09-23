@@ -1,4 +1,4 @@
-package com.codelab.core;
+package com.codelab.core.jpa;
 
 import com.codelab.common.spring.persistence.CodelabModule;
 import org.springframework.boot.jdbc.DataSourceBuilder;

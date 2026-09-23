@@ -19,6 +19,68 @@ services:
       timeout: 5s
       retries: 10
 
+  pulsar:
+    image: apachepulsar/pulsar:4.2.4
+    container_name: pulsar
+    hostname: pulsar
+    profiles: ["pulsar"]
+    restart: unless-stopped
+
+    ports:
+      - "6650:16650" # IntelliJ -> external listener
+      - "8081:8080"  # Admin API
+
+    environment:
+      PULSAR_PREFIX_advertisedAddress: "pulsar"
+
+      # Both listeners must be advertised because your 4.2.4 validator
+      # requires internalListenerName to exist in advertisedListeners.
+      PULSAR_PREFIX_advertisedListeners: "internal:pulsar://pulsar:6650,external:pulsar://localhost:6650"
+
+      # ONLY the additional external socket goes here.
+      # The internal socket is already created from brokerServicePort=6650.
+      PULSAR_PREFIX_bindAddresses: "external:pulsar://0.0.0.0:16650"
+
+      PULSAR_PREFIX_internalListenerName: "internal"
+
+    command:
+      - bash
+      - -c
+      - |
+        bin/apply-config-from-env.py conf/standalone.conf
+        exec bin/pulsar standalone
+
+    volumes:
+      - pulsar_data:/pulsar/data
+      - pulsar_conf:/pulsar/conf
+
+    healthcheck:
+      test:
+        - CMD
+        - bin/pulsar-admin
+        - brokers
+        - healthcheck
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 30s
+
+  pulsar-manager:
+    image: apachepulsar/pulsar-manager:v0.4.0
+    container_name: pulsar-manager
+    profiles: ["pulsar"]
+    restart: unless-stopped
+    ports:
+      - "9527:9527"
+      - "7750:7750"
+    environment:
+      SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
+    volumes:
+      - pulsar_manager_data:/pulsar-manager/pulsar-manager/dbdata
+    depends_on:
+      pulsar:
+        condition: service_healthy
+
   redis:
     image: redis:8.8
     container_name: redis
@@ -33,28 +95,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
-  kafka:
-    image: apache/kafka:4.3.1
-    container_name: kafka
-    hostname: kafka
-    profiles: ["kafka"]
-    restart: unless-stopped
-    ports:
-      - "9092:9092"
-    environment:
-      # KRaft mode - no zookeeper needed (official Apache Kafka image)
-      KAFKA_NODE_ID: 1
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://:19092,CONTROLLER://:19093,PLAINTEXT_HOST://:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:19092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:19093
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    volumes:
-      - kafka_data:/var/lib/kafka/data
 
   cassandra:
     image: cassandra:5.0
@@ -79,14 +119,11 @@ services:
       - neo4j
     container_name: neo4j
     restart: unless-stopped
-
     ports:
       - "7474:7474" # Neo4j Browser
       - "7687:7687" # Bolt
-
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-password123}
-
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
@@ -95,8 +132,10 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  kafka_data:
+  pulsar_data:
+  pulsar_conf:
   cassandra_data:
   neo4j_data:
   neo4j_logs:
   neo4j_plugins:
+  pulsar_manager_data:
