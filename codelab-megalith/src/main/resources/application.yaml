@@ -18,7 +18,18 @@ spring:
     jpa:
       repositories:
         enabled: false
-
+  pulsar:
+    client:
+      service-url: pulsar://localhost:6650
+    admin:
+      service-url: http://localhost:8081
+    consumer:
+      subscription:
+        type: shared
+        mode: durable
+        initial-position: earliest
+    producer:
+      send-timeout: 10s
 logging:
   level:
     org.hibernate.tool.schema: DEBUG
@@ -28,3 +39,7 @@ springdoc:
 
   swagger-ui:
     path: /swagger-ui
+app:
+  pulsar:
+    tenant.prefix: codelab-
+    namespace: local

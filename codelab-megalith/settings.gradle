@@ -1,5 +1,8 @@
 plugins {
     id 'com.codelab.settings' version '1.0.0'
 }
-
+includeBuild('../codelab-bom')
+includeBuild('../codelab-commons')
+includeBuild('../codelab-movies')
+includeBuild('../codelab-orders')
 rootProject.name = 'codelab-megalith'
