@@ -3,6 +3,8 @@ package com.codelab.gradle;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
+
+import com.diffplug.gradle.spotless.SpotlessExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.ArtifactCollection;
@@ -69,7 +71,22 @@ public class CodelabJavaQualityPlugin implements Plugin<Project> {
   }
 
   private void configureSpotless(Project project) {
-    // Configure Spotless here.
+    SpotlessExtension spotless = project.getExtensions().getByType(SpotlessExtension.class);
+
+    spotless.java(
+            java -> {
+              java.target("src/**/*.java");
+              java.googleJavaFormat(); // or java.googleJavaFormat("1.22.0") to pin a version
+              java.removeUnusedImports();
+              java.trimTrailingWhitespace();
+              java.endWithNewline();
+            });
+
+    spotless.groovyGradle(
+            groovy -> {
+              groovy.target("*.gradle");
+              groovy.greclipse();
+            });
   }
 
   private void configureQualityChecks(Project project) {
