@@ -1,6 +1,7 @@
 package com.codelab.core.eventbus;
 
 import com.codelab.common.spring.eventbus.CodelabEventPublisher;
+import java.lang.reflect.Proxy;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.lang.reflect.Proxy;
 
 @RequiredArgsConstructor
 public class CodelabPublisherFactoryBean<T extends CodelabEventPublisher<?>>

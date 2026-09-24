@@ -10,7 +10,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.jpa.EntityManagerFactoryBuilder;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.config.JpaRepositoryConfigExtension;

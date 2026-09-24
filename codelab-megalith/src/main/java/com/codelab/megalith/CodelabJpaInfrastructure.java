@@ -11,40 +11,35 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({
-        JpaProperties.class,
-        HibernateProperties.class
-})
+@EnableConfigurationProperties({JpaProperties.class, HibernateProperties.class})
 public class CodelabJpaInfrastructure {
 
-    @Bean
-    JpaVendorAdapter jpaVendorAdapter(JpaProperties jpaProperties) {
-        HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+  @Bean
+  JpaVendorAdapter jpaVendorAdapter(JpaProperties jpaProperties) {
+    HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
 
-        adapter.setShowSql(jpaProperties.isShowSql());
-        adapter.setGenerateDdl(jpaProperties.isGenerateDdl());
+    adapter.setShowSql(jpaProperties.isShowSql());
+    adapter.setGenerateDdl(jpaProperties.isGenerateDdl());
 
-        String platform = jpaProperties.getDatabasePlatform();
-        if (platform != null) {
-            adapter.setDatabasePlatform(platform);
-        }
-
-        return adapter;
+    String platform = jpaProperties.getDatabasePlatform();
+    if (platform != null) {
+      adapter.setDatabasePlatform(platform);
     }
 
-    @Bean
-    EntityManagerFactoryBuilder entityManagerFactoryBuilder(
-            JpaVendorAdapter vendorAdapter,
-            JpaProperties jpaProperties,
-            HibernateProperties hibernateProperties) {
+    return adapter;
+  }
 
-        return new EntityManagerFactoryBuilder(
-                vendorAdapter,
-                dataSource -> hibernateProperties.determineHibernateProperties(
-                        jpaProperties.getProperties(),
-                        new HibernateSettings()
-                ),
-                null
-        );
-    }
+  @Bean
+  EntityManagerFactoryBuilder entityManagerFactoryBuilder(
+      JpaVendorAdapter vendorAdapter,
+      JpaProperties jpaProperties,
+      HibernateProperties hibernateProperties) {
+
+    return new EntityManagerFactoryBuilder(
+        vendorAdapter,
+        dataSource ->
+            hibernateProperties.determineHibernateProperties(
+                jpaProperties.getProperties(), new HibernateSettings()),
+        null);
+  }
 }

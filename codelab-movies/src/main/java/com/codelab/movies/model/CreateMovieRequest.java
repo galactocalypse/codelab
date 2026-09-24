@@ -8,11 +8,11 @@ import lombok.Data;
 @AllArgsConstructor
 public class CreateMovieRequest {
 
-    private String name;
+  private String name;
 
-    public Movie toEntity() {
-        Movie movie = new Movie();
-        movie.setName(name);
-        return movie;
-    }
+  public Movie toEntity() {
+    Movie movie = new Movie();
+    movie.setName(name);
+    return movie;
+  }
 }

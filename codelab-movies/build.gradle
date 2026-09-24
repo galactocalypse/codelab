@@ -1,6 +1,6 @@
 plugins {
-    id 'java-library'
-    id 'com.codelab.gradle'
+	id 'java-library'
+	id 'com.codelab.gradle'
 }
 
 group = 'com.codelab'
@@ -9,22 +9,22 @@ description = 'Codelab Movies'
 
 
 dependencies {
-    implementation platform('com.codelab:codelab-bom:1.0.0')
-    annotationProcessor platform('com.codelab:codelab-bom:1.0.0')
-    testAnnotationProcessor platform('com.codelab:codelab-bom:1.0.0')
-    implementation 'com.codelab:codelab-commons:1.0.0'
+	implementation platform('com.codelab:codelab-bom:1.0.0')
+	annotationProcessor platform('com.codelab:codelab-bom:1.0.0')
+	testAnnotationProcessor platform('com.codelab:codelab-bom:1.0.0')
+	implementation 'com.codelab:codelab-commons:1.0.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

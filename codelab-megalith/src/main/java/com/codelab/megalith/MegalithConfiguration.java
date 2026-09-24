@@ -2,8 +2,6 @@ package com.codelab.megalith;
 
 import com.codelab.core.CodelabModuleRegistrar;
 import com.codelab.core.eventbus.CodelabPulsarListenerConfigurer;
-import com.codelab.core.eventbus.CodelabPulsarRegistryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

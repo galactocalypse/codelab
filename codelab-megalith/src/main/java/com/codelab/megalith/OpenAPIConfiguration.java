@@ -6,11 +6,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(
-                title = "Codelab API",
-                version = "1.0.0",
-                description = "Very serious nothings"
-        )
-)
-public class OpenAPIConfiguration {
-}
+    info = @Info(title = "Codelab API", version = "1.0.0", description = "Very serious nothings"))
+public class OpenAPIConfiguration {}

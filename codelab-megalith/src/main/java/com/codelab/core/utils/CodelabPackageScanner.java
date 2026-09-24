@@ -1,5 +1,8 @@
 package com.codelab.core.utils;
 
+import java.lang.annotation.Annotation;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -8,24 +11,23 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class CodelabPackageScanner {
 
   /** List interfaces within basePackage that extend superClass */
-  public static <T> Set<Class<?>> scan(String basePackage, Class<T> superClass, boolean includeInterfaces, boolean includeConcreteClasses) {
+  public static <T> Set<Class<?>> scan(
+      String basePackage,
+      Class<T> superClass,
+      boolean includeInterfaces,
+      boolean includeConcreteClasses) {
     ClassPathScanningCandidateComponentProvider scanner =
         new ClassPathScanningCandidateComponentProvider(false) {
           @Override
           protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
             // default impl excludes non-concrete classes; override to allow interfaces
-              AnnotationMetadata metadata = beanDefinition.getMetadata();
-            return metadata.isIndependent() && (
-                    (includeInterfaces && metadata.isInterface())
-                    || (includeConcreteClasses && metadata.isConcrete())
-            );
+            AnnotationMetadata metadata = beanDefinition.getMetadata();
+            return metadata.isIndependent()
+                && ((includeInterfaces && metadata.isInterface())
+                    || (includeConcreteClasses && metadata.isConcrete()));
           }
         };
 

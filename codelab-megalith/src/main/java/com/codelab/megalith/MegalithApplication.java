@@ -6,15 +6,15 @@ import org.springframework.boot.data.jpa.autoconfigure.DataJpaRepositoriesAutoCo
 import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
-@SpringBootApplication(exclude = {
-        HibernateJpaAutoConfiguration.class,
-        DataJpaRepositoriesAutoConfiguration.class,
-        DataSourceAutoConfiguration.class
-})
+@SpringBootApplication(
+    exclude = {
+      HibernateJpaAutoConfiguration.class,
+      DataJpaRepositoriesAutoConfiguration.class,
+      DataSourceAutoConfiguration.class
+    })
 public class MegalithApplication {
 
-    static void main(String[] args) {
-        SpringApplication.run(MegalithApplication.class, args);
-    }
-
+  static void main(String[] args) {
+    SpringApplication.run(MegalithApplication.class, args);
+  }
 }

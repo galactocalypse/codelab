@@ -8,11 +8,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class MovieDto {
 
-    private long id;
-    private String name;
+  private long id;
+  private String name;
 
-    public static MovieDto from(Movie movie) {
-        return new MovieDto(movie.getId(), movie.getName());
-    }
-
+  public static MovieDto from(Movie movie) {
+    return new MovieDto(movie.getId(), movie.getName());
+  }
 }

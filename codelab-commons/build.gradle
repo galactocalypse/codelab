@@ -1,6 +1,6 @@
 plugins {
-    id 'java-library'
-    id 'com.codelab.gradle'
+	id 'java-library'
+	id 'com.codelab.gradle'
 }
 
 group = 'com.codelab'
@@ -8,22 +8,22 @@ version = '1.0.0'
 description = 'Codelab Commons'
 
 dependencies {
-    implementation platform("com.codelab:codelab-bom:1.0.0")
-    annotationProcessor platform("com.codelab:codelab-bom:1.0.0")
-    testAnnotationProcessor platform("com.codelab:codelab-bom:1.0.0")
+	implementation platform("com.codelab:codelab-bom:1.0.0")
+	annotationProcessor platform("com.codelab:codelab-bom:1.0.0")
+	testAnnotationProcessor platform("com.codelab:codelab-bom:1.0.0")
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-pulsar'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-pulsar'
 
-    testImplementation platform('org.junit:junit-bom:6.0.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    annotationProcessor 'org.projectlombok:lombok'
-    compileOnly 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation platform('org.junit:junit-bom:6.0.0')
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

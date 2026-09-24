@@ -114,8 +114,7 @@ public class CodelabPulsarRegistryUtils {
       return;
     }
     Set<Class<?>> candidates =
-        CodelabPackageScanner.scan(
-            module.basePackage(), CodelabEventConsumer.class, false, true);
+        CodelabPackageScanner.scan(module.basePackage(), CodelabEventConsumer.class, false, true);
     for (Class<?> candidate : candidates) {
       CodelabPackageScanner.validateAndGetAnnotation(candidate, CodelabSubscription.class);
       BeanDefinition definition =

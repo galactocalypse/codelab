@@ -2,6 +2,5 @@ package com.codelab.common.spring.eventbus;
 
 public interface CodelabEventConsumer<T> {
 
-    void consume(T event);
-
+  void consume(T event);
 }

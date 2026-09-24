@@ -8,18 +8,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderProducer producer;
+  private final OrderProducer producer;
 
-    @PostMapping
-    public void createOrder(@RequestBody CreateOrderRequest body) {
-        producer.send(body);
-    }
-
+  @PostMapping
+  public void createOrder(@RequestBody CreateOrderRequest body) {
+    producer.send(body);
+  }
 }
