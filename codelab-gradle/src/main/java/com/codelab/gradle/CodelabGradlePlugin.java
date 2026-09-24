@@ -63,8 +63,7 @@ public class CodelabGradlePlugin implements Plugin<Project> {
               project
                   .getPluginManager()
                   .withPlugin(
-                      "java",
-                      javaPlatformPlugin -> configureJavaPublishing(project, extension));
+                      "java", javaPlatformPlugin -> configureJavaPublishing(project, extension));
             });
     project
         .getTasks()

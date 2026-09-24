@@ -1,10 +1,9 @@
 package com.codelab.gradle;
 
+import com.diffplug.gradle.spotless.SpotlessExtension;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
-
-import com.diffplug.gradle.spotless.SpotlessExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.ArtifactCollection;
@@ -21,6 +20,9 @@ public class CodelabJavaQualityPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     project.getPluginManager().withPlugin("java", ignored -> configureJavaQuality(project));
+    project
+        .getPluginManager()
+        .withPlugin("java-platform", ignored -> configureBuildScriptQuality(project));
   }
 
   private void configureJavaQuality(Project project) {
@@ -30,6 +32,17 @@ public class CodelabJavaQualityPlugin implements Plugin<Project> {
     configureCheckstyle(project);
     configureSpotless(project);
     configureQualityChecks(project);
+  }
+
+  private void configureBuildScriptQuality(Project project) {
+    project.getPluginManager().apply("com.diffplug.spotless");
+
+    SpotlessExtension spotless = project.getExtensions().getByType(SpotlessExtension.class);
+    spotless.groovyGradle(
+        groovy -> {
+          groovy.target("*.gradle");
+          groovy.greclipse();
+        });
   }
 
   private void configureCheckstyle(Project project) {
@@ -74,19 +87,19 @@ public class CodelabJavaQualityPlugin implements Plugin<Project> {
     SpotlessExtension spotless = project.getExtensions().getByType(SpotlessExtension.class);
 
     spotless.java(
-            java -> {
-              java.target("src/**/*.java");
-              java.googleJavaFormat(); // or java.googleJavaFormat("1.22.0") to pin a version
-              java.removeUnusedImports();
-              java.trimTrailingWhitespace();
-              java.endWithNewline();
-            });
+        java -> {
+          java.target("src/**/*.java");
+          java.googleJavaFormat(); // or java.googleJavaFormat("1.22.0") to pin a version
+          java.removeUnusedImports();
+          java.trimTrailingWhitespace();
+          java.endWithNewline();
+        });
 
     spotless.groovyGradle(
-            groovy -> {
-              groovy.target("*.gradle");
-              groovy.greclipse();
-            });
+        groovy -> {
+          groovy.target("*.gradle");
+          groovy.greclipse();
+        });
   }
 
   private void configureQualityChecks(Project project) {
