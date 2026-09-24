@@ -1,7 +1,5 @@
 package com.codelab.core.eventbus;
 
-import static com.codelab.core.CodelabBeanNaming.deriveBeanName;
-
 import com.codelab.common.spring.eventbus.CodelabEventConsumer;
 import com.codelab.common.spring.eventbus.CodelabEventPublisher;
 import com.codelab.common.spring.eventbus.CodelabSubscription;
@@ -105,8 +103,7 @@ public class CodelabPulsarRegistryUtils {
               .addConstructorArgValue(payloadType.resolve())
               .setLazyInit(false); // producers should connect at startup, not first publish
 
-      String beanName = deriveBeanName(module, publisherIface); // standard nomenclature
-
+      String beanName = CodelabBeanNaming.deriveBeanName(module, publisherIface);
       registry.registerBeanDefinition(beanName, bdBuilder.getBeanDefinition());
     }
   }

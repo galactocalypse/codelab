@@ -1,6 +1,8 @@
 package com.codelab.core;
 
 import com.codelab.common.spring.persistence.CodelabModule;
+import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 
 public final class CodelabBeanNaming {
 
@@ -20,6 +22,12 @@ public final class CodelabBeanNaming {
 
     public static String deriveBeanName(CodelabModule module, String className) {
         return module.name() + "." + className;
+    }
+
+    public static BeanNameGenerator moduleScoped(CodelabModule module) {
+        return (definition, registry) -> {
+            return module.name() + "." + AnnotationBeanNameGenerator.INSTANCE.generateBeanName(definition, registry);
+        };
     }
 
 }

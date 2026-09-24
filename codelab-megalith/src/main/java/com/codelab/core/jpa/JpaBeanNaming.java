@@ -6,15 +6,15 @@ import com.codelab.core.CodelabBeanNaming;
 public class JpaBeanNaming {
 
     static String dataSourceBeanName(CodelabModule module) {
-        return CodelabBeanNaming.deriveBeanName(module, "DataSource");
+        return CodelabBeanNaming.deriveBeanName(module, "dataSource");
     }
 
     static String emfBeanName(CodelabModule module) {
-        return CodelabBeanNaming.deriveBeanName(module, "EntityManagerFactory");
+        return CodelabBeanNaming.deriveBeanName(module, "entityManagerFactory");
     }
 
     static String txBeanName(CodelabModule module) {
-        return CodelabBeanNaming.deriveBeanName(module, "TransactionManager");
+        return CodelabBeanNaming.deriveBeanName(module, "transactionManager");
     }
 
 }

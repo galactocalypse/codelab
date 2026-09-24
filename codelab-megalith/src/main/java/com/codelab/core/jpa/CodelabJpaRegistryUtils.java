@@ -1,6 +1,7 @@
 package com.codelab.core.jpa;
 
 import com.codelab.common.spring.persistence.CodelabModule;
+import com.codelab.core.CodelabBeanNaming;
 import com.codelab.core.CodelabModuleRegistrationContext;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,7 @@ public class CodelabJpaRegistryUtils {
                       .persistenceUnit(module.persistenceUnit())
                       .build();
                 })
+            .addDependsOn(JpaBeanNaming.dataSourceBeanName(module))
             .getBeanDefinition();
 
     registry.registerBeanDefinition(JpaBeanNaming.emfBeanName(module), def);
@@ -87,7 +89,7 @@ public class CodelabJpaRegistryUtils {
     ResourceLoader resourceLoader = context.getResourceLoader();
     RepositoryConfigurationSource source =
         new CodelabJpaRepositoryConfigurationSource(
-            module, environment, resourceLoader, registry, AnnotationBeanNameGenerator.INSTANCE);
+            module, environment, resourceLoader, registry, CodelabBeanNaming.moduleScoped(module));
     RepositoryConfigurationExtension extension = new JpaRepositoryConfigExtension();
     RepositoryConfigurationDelegate delegate =
         new RepositoryConfigurationDelegate(source, resourceLoader, environment);

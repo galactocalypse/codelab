@@ -5,17 +5,12 @@ import com.codelab.common.spring.eventbus.CodelabSubscription;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-
-import com.codelab.common.spring.persistence.CodelabModule;
-import com.codelab.core.ModuleUtils;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.api.DeadLetterPolicy;
 import org.apache.pulsar.common.schema.SchemaType;
 import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
@@ -31,18 +26,16 @@ import org.springframework.pulsar.listener.AckMode;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-
 @Slf4j
 @RequiredArgsConstructor
-public class CodelabPulsarListenerConfigurer implements PulsarListenerConfigurer, ResourceLoaderAware, EnvironmentAware {
+public class CodelabPulsarListenerConfigurer
+    implements PulsarListenerConfigurer, ResourceLoaderAware, EnvironmentAware {
 
   private final ConfigurableListableBeanFactory beanFactory;
   private final MessageHandlerMethodFactory messageHandlerMethodFactory;
 
-  @Setter
-  private Environment environment;
-  @Setter
-  private ResourceLoader resourceLoader;
+  @Setter private Environment environment;
+  @Setter private ResourceLoader resourceLoader;
 
   @Override
   public void configurePulsarListeners(PulsarListenerEndpointRegistrar registrar) {
@@ -67,13 +60,18 @@ public class CodelabPulsarListenerConfigurer implements PulsarListenerConfigurer
             "Bean '%s' implements CodelabEventConsumer but has no @CodelabSubscription"
                 .formatted(beanName));
 
-    String moduleName = (String) beanFactory.getBeanDefinition(beanName)
-            .getAttribute(CodelabPulsarRegistryUtils.MODULE_ATTRIBUTE);
-    Assert.state(StringUtils.hasText(moduleName),
-            () -> "Bean '%s' has no module attribute — was it registered outside registerPulsarSubscriptions?"
-                    .formatted(beanName));
-    String resolvedTopic = CodelabTopicResolver.resolveTopicName(
-            moduleName, subscription, environment);
+    String moduleName =
+        (String)
+            beanFactory
+                .getBeanDefinition(beanName)
+                .getAttribute(CodelabPulsarRegistryUtils.MODULE_ATTRIBUTE);
+    Assert.state(
+        StringUtils.hasText(moduleName),
+        () ->
+            "Bean '%s' has no module attribute — was it registered outside registerPulsarSubscriptions?"
+                .formatted(beanName));
+    String resolvedTopic =
+        CodelabTopicResolver.resolveTopicName(moduleName, subscription, environment);
 
     MethodPulsarListenerEndpoint<V> endpoint = new MethodPulsarListenerEndpoint<>();
     endpoint.setId(beanName + "-codelabListener");
@@ -84,7 +82,9 @@ public class CodelabPulsarListenerConfigurer implements PulsarListenerConfigurer
     endpoint.setAckMode(AckMode.RECORD);
 
     endpoint.setTopics(resolvedTopic);
-    endpoint.setSubscriptionName(CodelabSubscriptionResolver.resolveSubscriptionName(moduleName, subscription.subscriptionName()));
+    endpoint.setSubscriptionName(
+        CodelabSubscriptionResolver.resolveSubscriptionName(
+            moduleName, subscription.subscriptionName()));
     endpoint.setSubscriptionType(subscription.type());
     endpoint.setConcurrency(subscription.concurrency());
 
