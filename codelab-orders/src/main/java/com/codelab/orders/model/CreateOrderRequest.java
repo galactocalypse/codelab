@@ -1,5 +1,6 @@
 package com.codelab.orders.model;
 
+import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,5 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateOrderRequest {
 
-  private String customerId;
+  private Long customerId;
+  private List<LineItem> lineItems;
+
+  @Data
+  @NoArgsConstructor
+  public static class LineItem {
+    private Long productId;
+    private int count;
+  }
 }

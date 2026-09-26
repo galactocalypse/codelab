@@ -1,22 +1,30 @@
 package com.codelab.orders.controller;
 
-import com.codelab.orders.model.CreateOrderRequest;
-import com.codelab.orders.workflow.OrderProducer;
+import com.codelab.orders.model.*;
+import com.codelab.orders.service.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-  private final OrderProducer producer;
+  private final OrderServiceImpl service;
 
   @PostMapping
-  public void createOrder(@RequestBody CreateOrderRequest body) {
-    producer.send(body);
+  public CreateOrderResponse createOrder(@RequestBody CreateOrderRequest body) {
+    return service.createOrder(body);
+  }
+
+  @GetMapping("/{orderId}")
+  public GetOrderResponse getOrder(@PathVariable("orderId") Long orderId) {
+    return service.getOrder(orderId);
+  }
+
+  @PutMapping("/{orderId}")
+  public UpdateOrderResponse updateOrderStatus(
+      @PathVariable("orderId") Long orderId, @RequestBody UpdateOrderRequest request) {
+    return service.updateStatus(orderId, request);
   }
 }
