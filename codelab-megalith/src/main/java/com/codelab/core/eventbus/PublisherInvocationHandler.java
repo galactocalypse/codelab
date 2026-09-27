@@ -2,15 +2,14 @@ package com.codelab.core.eventbus;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import lombok.AllArgsConstructor;
 import org.apache.pulsar.client.api.Producer;
 
-class PublisherInvocationHandler implements InvocationHandler {
+@AllArgsConstructor
+class PublisherInvocationHandler<E> implements InvocationHandler {
 
-  private final Producer<Object> producer;
-
-  PublisherInvocationHandler(Producer<Object> producer) {
-    this.producer = producer;
-  }
+  private final Producer<E> producer;
+  private final Class<E> payloadType;
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -21,10 +20,37 @@ class PublisherInvocationHandler implements InvocationHandler {
       return method.invoke(this, args);
     }
 
-    if ("publish".equals(method.getName()) && args.length == 1) {
-      return producer.send(args[0]); // or sendAsync(), depending on your sync/async decision
+    if ("publish".equals(method.getName())) {
+      if (args == null) {
+        throw new IllegalArgumentException("Missing publish arguments");
+      }
+
+      if (args.length == 1) {
+
+        E event = validatePayload(args[0]);
+
+        return producer.newMessage().value(event).send();
+      }
+
+      if (args.length == 2 && args[0] instanceof String key) {
+        E event = validatePayload(args[1]);
+        return producer.newMessage().key(key).value(event).send();
+      }
     }
 
     throw new UnsupportedOperationException("Unexpected method on publisher proxy: " + method);
+  }
+
+  @SuppressWarnings("unchecked")
+  private E validatePayload(Object value) {
+    if (!payloadType.isInstance(value)) {
+      throw new IllegalArgumentException(
+          "Expected "
+              + payloadType.getName()
+              + " but got "
+              + (value == null ? "null" : value.getClass().getName()));
+    }
+
+    return (E) value;
   }
 }

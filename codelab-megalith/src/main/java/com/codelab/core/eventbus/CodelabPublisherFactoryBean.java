@@ -12,22 +12,23 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @RequiredArgsConstructor
-public class CodelabPublisherFactoryBean<T extends CodelabEventPublisher<?>>
+public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
     implements FactoryBean<T>, InitializingBean, DisposableBean {
 
   private final Class<T> publisherInterface;
   private final String resolvedTopic;
-  private final Class<?> payloadType;
+  private final Class<E> payloadType;
 
   @Autowired
   private PulsarClient pulsarClient; // injected normally, since this bean IS in the app context
 
-  private Producer<?> producer;
+  private Producer<E> producer;
   private T proxy;
 
   @Override
+  @SuppressWarnings("unchecked")
   public void afterPropertiesSet() throws Exception {
-    Schema<?> schema = Schema.JSON(payloadType); // or your schema-resolution strategy
+    Schema<E> schema = Schema.JSON(payloadType); // or your schema-resolution strategy
     producer = pulsarClient.newProducer(schema).topic(resolvedTopic).create();
 
     proxy =
@@ -35,7 +36,7 @@ public class CodelabPublisherFactoryBean<T extends CodelabEventPublisher<?>>
             Proxy.newProxyInstance(
                 publisherInterface.getClassLoader(),
                 new Class<?>[] {publisherInterface},
-                new PublisherInvocationHandler((Producer<Object>) producer));
+                new PublisherInvocationHandler<>(producer, payloadType));
   }
 
   @Override
@@ -44,13 +45,8 @@ public class CodelabPublisherFactoryBean<T extends CodelabEventPublisher<?>>
   }
 
   @Override
-  public Class<?> getObjectType() {
+  public Class<T> getObjectType() {
     return publisherInterface;
-  }
-
-  @Override
-  public boolean isSingleton() {
-    return true;
   }
 
   @Override
