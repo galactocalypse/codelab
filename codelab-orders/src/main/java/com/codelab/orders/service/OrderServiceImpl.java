@@ -22,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
 
   public CreateOrderResponse createOrder(CreateOrderRequest request) {
     OrderEntity createdOrder = repository.save(buildEntity(request));
-    publisher.publish(OrderCreatedEvent.from(createdOrder));
+    publisher.publish(Long.toString(createdOrder.getId()), OrderCreatedEvent.from(createdOrder));
     return CreateOrderResponse.from(createdOrder);
   }
 
