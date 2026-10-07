@@ -1,10 +1,5 @@
 package com.codelab.movies.autoconfigure;
 
-import com.codelab.movies.*;
-import com.codelab.movies.service.MovieCreditService;
-import com.codelab.movies.service.MovieRoleService;
-import com.codelab.movies.service.MovieService;
-import com.codelab.movies.service.PersonService;
 import com.codelab.movies.tmdb.queue.MovieEventPublisher;
 import com.codelab.movies.tmdb.queue.MovieFeedRunner;
 import com.codelab.movies.tmdb.service.TmdbMovieImportService;
@@ -18,18 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @AutoConfiguration
-@Import({
-  MovieController.class,
-  MovieCreditController.class,
-  MovieRoleController.class,
-  PersonController.class,
-  MovieService.class,
-  MovieCreditService.class,
-  MovieRoleService.class,
-  PersonService.class,
-  TmdbMovieMapper.class,
-  TmdbMovieImportService.class
-})
+@Import({TmdbMovieMapper.class, TmdbMovieImportService.class})
 public class MoviesAutoConfiguration {
 
   /**
