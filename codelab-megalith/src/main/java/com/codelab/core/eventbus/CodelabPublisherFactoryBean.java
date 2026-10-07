@@ -10,8 +10,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.pulsar.core.PulsarProducerFactory;
-import org.springframework.pulsar.core.PulsarTemplate;
 
 @RequiredArgsConstructor
 public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>

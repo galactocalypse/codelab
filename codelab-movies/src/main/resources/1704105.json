@@ -1,0 +1,1078 @@
+{
+  "adult": false,
+  "backdrop_path": "/lJqICz6IdtU3i0LsgUSeCy4sloo.jpg",
+  "belongs_to_collection": null,
+  "budget": 2384,
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 1704105,
+  "imdb_id": null,
+  "origin_country": [
+    "PT"
+  ],
+  "original_language": "pt",
+  "original_title": "Limiar",
+  "overview": "",
+  "popularity": 0.8699,
+  "poster_path": "/99xoToVS8HvLbRzaHOMeWV7KJpY.jpg",
+  "production_companies": [],
+  "production_countries": [],
+  "release_date": "",
+  "revenue": 0,
+  "runtime": 0,
+  "softcore": false,
+  "spoken_languages": [
+    {
+      "english_name": "Portuguese",
+      "iso_639_1": "pt",
+      "name": "Portugu\u00eas"
+    }
+  ],
+  "status": "Released",
+  "tagline": "",
+  "title": "Limiar",
+  "video": false,
+  "vote_average": 0.0,
+  "vote_count": 0,
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 6247823,
+        "known_for_department": "Acting",
+        "name": "Bryan Carvalho",
+        "original_name": "Bryan Carvalho",
+        "popularity": 0.3503,
+        "profile_path": null,
+        "cast_id": 1,
+        "character": "\u00cdcaro",
+        "credit_id": "6a18f6db7cb92d0c73bab6bc",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 6247824,
+        "known_for_department": "Acting",
+        "name": "Francisca Miranda",
+        "original_name": "Francisca Miranda",
+        "popularity": 0.3389,
+        "profile_path": null,
+        "cast_id": 2,
+        "character": "Aurora",
+        "credit_id": "6a18f6e4fb9c680231744f24",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 6247825,
+        "known_for_department": "Acting",
+        "name": "Lu\u00eds Delgado",
+        "original_name": "Lu\u00eds Delgado",
+        "popularity": 0.4089,
+        "profile_path": null,
+        "cast_id": 3,
+        "character": "Vulto",
+        "credit_id": "6a18f6efb558f8f234744df7",
+        "order": 2
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 6247828,
+        "known_for_department": "Camera",
+        "name": "Jos\u00e9 Pedro",
+        "original_name": "Jos\u00e9 Pedro",
+        "popularity": 0.25,
+        "profile_path": null,
+        "credit_id": "6a18f72acd34b97eb9744e55",
+        "department": "Camera",
+        "job": "Director of Photography"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4473019,
+        "known_for_department": "Directing",
+        "name": "Francisco Termentina",
+        "original_name": "Francisco Termentina",
+        "popularity": 0.2871,
+        "profile_path": null,
+        "credit_id": "6a18f743fe6a511dc292a2d5",
+        "department": "Art",
+        "job": "Assistant Director of Photography"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4473018,
+        "known_for_department": "Acting",
+        "name": "Miriam Carvalho",
+        "original_name": "Miriam Carvalho",
+        "popularity": 0.2552,
+        "profile_path": null,
+        "credit_id": "6a18f76640b8e4c0d1328112",
+        "department": "Sound",
+        "job": "Sound Director"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5839627,
+        "known_for_department": "Directing",
+        "name": "Lino Borda D' \u00c1gua",
+        "original_name": "Lino Borda D' \u00c1gua",
+        "popularity": 0.2588,
+        "profile_path": null,
+        "credit_id": "6a18f77dcd34b97eb9744e5d",
+        "department": "Sound",
+        "job": "Sound Assistant"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 6247829,
+        "known_for_department": "Production",
+        "name": "Filipe Carmo",
+        "original_name": "Filipe Carmo",
+        "popularity": 0.2559,
+        "profile_path": null,
+        "credit_id": "6a18f7a4552fee997092a1ca",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 6247830,
+        "known_for_department": "Production",
+        "name": "Ruben Chipa",
+        "original_name": "Ruben Chipa",
+        "popularity": 0.2714,
+        "profile_path": null,
+        "credit_id": "6a18f7bdb558f8f234744e05",
+        "department": "Production",
+        "job": "Producer's Assistant"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3602307,
+        "known_for_department": "Directing",
+        "name": "Flip Anast\u00e1cio",
+        "original_name": "Flip Anast\u00e1cio",
+        "popularity": 0.5286,
+        "profile_path": "/rRwkv0QGd5Rp9pDMto2g0KJM6yi.jpg",
+        "credit_id": "6a18f7d0a9f05291be744e27",
+        "department": "Editing",
+        "job": "Editor"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5469671,
+        "known_for_department": "Sound",
+        "name": "Samuel Rendeiro",
+        "original_name": "Samuel Rendeiro",
+        "popularity": 0.3797,
+        "profile_path": "/quOcl4TJ2siCaM0jXwhUC6oPsfF.jpg",
+        "credit_id": "6a18f9903d70207db5985e0e",
+        "department": "Writing",
+        "job": "Writer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5469671,
+        "known_for_department": "Sound",
+        "name": "Samuel Rendeiro",
+        "original_name": "Samuel Rendeiro",
+        "popularity": 0.3797,
+        "profile_path": "/quOcl4TJ2siCaM0jXwhUC6oPsfF.jpg",
+        "credit_id": "6a18f9a5a6fcd4ee366a0866",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4892316,
+        "known_for_department": "Acting",
+        "name": "Diogo Maia",
+        "original_name": "Diogo Maia",
+        "popularity": 0.4398,
+        "profile_path": null,
+        "credit_id": "6a18f9dbcf7cd55152985e5e",
+        "department": "Directing",
+        "job": "Assistant Director"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4892316,
+        "known_for_department": "Acting",
+        "name": "Diogo Maia",
+        "original_name": "Diogo Maia",
+        "popularity": 0.4398,
+        "profile_path": null,
+        "credit_id": "6a18f9efa6fcd4ee366a086f",
+        "department": "Writing",
+        "job": "Writer"
+      }
+    ]
+  },
+  "reviews": {
+    "page": 1,
+    "results": [],
+    "total_pages": 0,
+    "total_results": 0
+  },
+  "similar": {
+    "page": 1,
+    "results": [
+      {
+        "adult": false,
+        "backdrop_path": "/f9hlaRNmzl6MKu5HNAY0oHcJfya.jpg",
+        "genre_ids": [
+          99
+        ],
+        "id": 1197811,
+        "title": "Terror industria argentina",
+        "original_language": "es",
+        "original_title": "Terror industria argentina",
+        "overview": "Documentary about the history and present of Argentine horror cinema.",
+        "popularity": 1.4018,
+        "poster_path": "/iF1sjheG41CZy5ymUnGFO0qNl1B.jpg",
+        "release_date": "2017-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          18,
+          10402
+        ],
+        "id": 818790,
+        "title": "STILLNESS IN WONDERLAND: THE FILM",
+        "original_language": "en",
+        "original_title": "STILLNESS IN WONDERLAND: THE FILM",
+        "overview": "A short film accompaniment to Little Simz's sophomore album release. A reality bending journey into a world that isn't quite what it seems on first glance.",
+        "popularity": 0.5014,
+        "poster_path": "/o2j0z6YhWzFTemJqE62FeFDme96.jpg",
+        "release_date": "2016-12-16",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          10770,
+          27
+        ],
+        "id": 818793,
+        "title": "The Deacon of Dark River",
+        "original_language": "is",
+        "original_title": "Dj\u00e1kninn",
+        "overview": "A story based on the folk tale of the ghost Dj\u00e1kninn from Myrk\u00e1 set in modern day Iceland.",
+        "popularity": 0.8351,
+        "poster_path": "/2WIauFWF3RG2Nyej81Aa5MOV4gn.jpg",
+        "release_date": "1988-12-26",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/eRl0TUlHdheFl1tWUA4P5Ol4DJd.jpg",
+        "genre_ids": [
+          18
+        ],
+        "id": 818794,
+        "title": "Past Saving",
+        "original_language": "en",
+        "original_title": "Past Saving",
+        "overview": "A young man builds a device to save his dying father.",
+        "popularity": 2.341,
+        "poster_path": "/5FXjtOfuMrvris2Bq4uHhPa44On.jpg",
+        "release_date": "",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          18,
+          10770
+        ],
+        "id": 818795,
+        "title": "Day of Hope",
+        "original_language": "is",
+        "original_title": "Dagur vonar",
+        "overview": "A TV movie based on the book by Birgir Sigur\u00f0sson",
+        "popularity": 1.2207,
+        "poster_path": "/i4Ih3qllJUvppFXyW5YOwtCH2jr.jpg",
+        "release_date": "1988-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/7zmuvIW8iEzqBrIXenYdUkGLmNh.jpg",
+        "genre_ids": [
+          27,
+          53,
+          18
+        ],
+        "id": 631427,
+        "title": "Memento Mori",
+        "original_language": "en",
+        "original_title": "Memento Mori",
+        "overview": "Waking up alone, cold, and scared, the Lost searches for hope in salvation.",
+        "popularity": 0.8469,
+        "poster_path": "/xBscCJdu6I9G9JevDu8OiKK5vH6.jpg",
+        "release_date": "2019-09-14",
+        "softcore": false,
+        "video": false,
+        "vote_average": 10.0,
+        "vote_count": 1
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          28,
+          18
+        ],
+        "id": 631413,
+        "title": "Xiao Yao Valley in the Song Mountains",
+        "original_language": "en",
+        "original_title": "Xiao Yao Valley in the Song Mountains",
+        "overview": "The old master Wu De gives his powerful magic sword to his student Li Laoquan. He send another one of his students, Zhao Bantian, away because of his unethical attitude. Ethic is, according to Wu De, the foundation of all martial arts. 30 years later Zhao returns to the village. He seems friendly but in fact his primary goals are to make money and be powerful in every way possible.",
+        "popularity": 1.4425,
+        "poster_path": "/u8160WdQ7Gqdn8qFYPwWkIcnWKr.jpg",
+        "release_date": "2001-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 9.0,
+        "vote_count": 1
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          35,
+          9648,
+          27
+        ],
+        "id": 631416,
+        "title": "Sworn Revenge",
+        "original_language": "cn",
+        "original_title": "\u649e\u9b3c\u4f60\u4e4b\u8840\u5149\u4e4b\u707d",
+        "overview": "Chen Xiuling, owner of a house in the New Territories of Hong Kong, was killed, but the murderer also died at the scene. Chen Xiuling's sister Chen Xiumei in the United States returned to Hong Kong to deal with her business. Cheng Hui, a lawyer, helped her deal with her sister's industry. So they came to the house village. Cheng Hui's two best friends of the dead party began to pursue Xiumei. When they went to the bar to drink, a beautiful girl was sitting there. At the bar, the beautiful girl looked back and smiled. Four people were frightened and frightened. It turned out that the beautiful girl was Xiuling who had died.",
+        "popularity": 0.7609,
+        "poster_path": "/s6ohWCzX96iklan14ONoJCBJelZ.jpg",
+        "release_date": "2000-07-22",
+        "softcore": false,
+        "video": false,
+        "vote_average": 4.5,
+        "vote_count": 2
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          18
+        ],
+        "id": 1391795,
+        "title": "Desfragmento",
+        "original_language": "pt",
+        "original_title": "Desfragmento",
+        "overview": "",
+        "popularity": 1.4385,
+        "poster_path": "/fJwrFC647ObCEDUVoDnly4B2aeQ.jpg",
+        "release_date": "2017-04-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/an7appAunGlloOjb5NG5JycG5JQ.jpg",
+        "genre_ids": [
+          18,
+          9648,
+          53
+        ],
+        "id": 631418,
+        "title": "What Death Leaves Behind",
+        "original_language": "en",
+        "original_title": "What Death Leaves Behind",
+        "overview": "After a kidney transplant, Jake Warren experiences reoccurring nightmares he believes to be visions of his donor's violent murder, sending him on a dark path of vengeance, leading to an unbearable truth.",
+        "popularity": 0.9344,
+        "poster_path": "/esbThqt2wjPOKZ27FvTcnXPCOCL.jpg",
+        "release_date": "2018-03-10",
+        "softcore": false,
+        "video": false,
+        "vote_average": 4.5,
+        "vote_count": 4
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          18
+        ],
+        "id": 1391798,
+        "title": "Winkle Twinkle",
+        "original_language": "bn",
+        "original_title": "\u0989\u0987\u0999\u09cd\u0995\u09b2 \u099f\u09c1\u0987\u0999\u09cd\u0995\u09b2",
+        "overview": "An idealistic political activist returns to a world that has changed beyond recognition, forcing him to confront the clash between his long-held beliefs and modern realities. Torn between family, ideology, and his own sense of identity, he embarks on a deeply personal journey of self-discovery and change.",
+        "popularity": 0.7826,
+        "poster_path": "/zIbylgWM0rSdpKkv5jy76QXfwKU.jpg",
+        "release_date": "2026-09-04",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          10749,
+          27
+        ],
+        "id": 1391800,
+        "title": "Tsud\u014d Mono-tachi",
+        "original_language": "ja",
+        "original_title": "\u3064\u3069\u3046\u3082\u306e\u305f\u3061",
+        "overview": "Seto, worn down by workplace stress and struggling mentally, returns to his hometown. To celebrate his return, six men and women from his high school days gather together. A nostalgic hangout spot. The usual revelry. Hidden agendas. And then, at the end of their tangled emotions, something ominous appears, something beyond their understanding.",
+        "popularity": 1.0417,
+        "poster_path": "/pJDCTTswfoUYaP9reHjZ8QQa2WZ.jpg",
+        "release_date": "2019-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          18
+        ],
+        "id": 1391802,
+        "title": "Beauty Building",
+        "original_language": "fr",
+        "original_title": "Beauty Building",
+        "overview": "",
+        "popularity": 1.9348,
+        "poster_path": null,
+        "release_date": "2016-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/411pdZsbIQJYudhxDsMG5ebOnsf.jpg",
+        "genre_ids": [
+          18
+        ],
+        "id": 631435,
+        "title": "Bruno",
+        "original_language": "en",
+        "original_title": "Bruno",
+        "overview": "A homeless man searching for his lost dog forges an unexpected bond with a young boy.",
+        "popularity": 0.8454,
+        "poster_path": "/qRfMNyIpaJAAURVR1EGymIGzD6Q.jpg",
+        "release_date": "2019-09-27",
+        "softcore": false,
+        "video": false,
+        "vote_average": 7.0,
+        "vote_count": 2
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/6UNjCOw1V0tY1G7AiJRK9nobCU8.jpg",
+        "genre_ids": [
+          18
+        ],
+        "id": 631438,
+        "title": "Rise from the Tide",
+        "original_language": "zh",
+        "original_title": "\u6f6e\u751f",
+        "overview": "Left in the village by parents who have emigrated for work, a young girl dreams of becoming a dancer and escaping rural village life. Her grandfather forces her to sign up for swimming lessons instead of ballet class where she uses buoyancy of the pool to help her practice ballet positions. When she realizes her skills at full gravity are not what she imagined, her relatives cobble together a crude space for her to practice.",
+        "popularity": 0.4684,
+        "poster_path": "/kz4IhVUc0Qb4YDkIYU222DTy1xP.jpg",
+        "release_date": "2019-10-03",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          27
+        ],
+        "id": 1391803,
+        "title": "Fallen Star",
+        "original_language": "en",
+        "original_title": "Fallen Star",
+        "overview": "A ballet dancer suffers a mishap. Entry in the Sour4 Very Short Horror Film Competition, 2013.",
+        "popularity": 0.4219,
+        "poster_path": null,
+        "release_date": "2013-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/hI0FJIYo4E8XyRZMnLQGohxWzi4.jpg",
+        "genre_ids": [
+          18
+        ],
+        "id": 1391804,
+        "title": "Do Lado de Dentro",
+        "original_language": "pt",
+        "original_title": "Do Lado de Dentro",
+        "overview": "",
+        "popularity": 1.0906,
+        "poster_path": "/8bhN73qxavA4i8TD4WTr6wyzIsA.jpg",
+        "release_date": "2024-11-22",
+        "softcore": false,
+        "video": false,
+        "vote_average": 0.0,
+        "vote_count": 0
+      },
+      {
+        "adult": false,
+        "backdrop_path": null,
+        "genre_ids": [
+          35,
+          18
+        ],
+        "id": 268992,
+        "title": "House",
+        "original_language": "en",
+        "original_title": "House",
+        "overview": "Fresh from group therapy, a man shares odd anecdotes with ten others inside a church.",
+        "popularity": 1.0683,
+        "poster_path": "/v612ukb7I6g0cAgvCnABaZnj1eZ.jpg",
+        "release_date": "1995-01-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 4.667,
+        "vote_count": 6
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/astyCwMeWUj3J3BcAOXNAgvr6cF.jpg",
+        "genre_ids": [
+          27,
+          53
+        ],
+        "id": 268993,
+        "title": "House of Dust",
+        "original_language": "en",
+        "original_title": "House of Dust",
+        "overview": "College students exploring an abandoned insane asylum accidentally shatter canisters holding the cremains of former mental patients. Inhaling the dusty ash filling the air, they're soon possessed by the souls once held within them. One is a convicted serial killer from 1950.",
+        "popularity": 1.5096,
+        "poster_path": "/mygF656QMkWEAt2hczmViVxgjVH.jpg",
+        "release_date": "2013-11-01",
+        "softcore": false,
+        "video": false,
+        "vote_average": 4.6,
+        "vote_count": 21
+      }
+    ],
+    "total_pages": 18301,
+    "total_results": 366008
+  },
+  "recommendations": {
+    "page": 1,
+    "results": [
+      {
+        "adult": false,
+        "backdrop_path": "/yZtnGzfZER0QU7ZG4r4RaZAaXJH.jpg",
+        "id": 1519168,
+        "title": "The Jester 2",
+        "original_title": "The Jester 2",
+        "overview": "When teen magician Max crosses paths with the sinister Jester on Halloween night, she must outsmart a supernatural killer whose magic is all too real and whose tricks always end up in blood.",
+        "poster_path": "/47dsw1jSOV0Be5zmy7CtLhYpqU.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53,
+          80
+        ],
+        "popularity": 3.8038,
+        "release_date": "2025-09-15",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.915,
+        "vote_count": 135
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/sLdlUypLzpQiJvO2dmqx5J7rigP.jpg",
+        "id": 1118595,
+        "title": "The Jester",
+        "original_title": "The Jester",
+        "overview": "A malevolent being known as The Jester terrorizes the inhabitants of a small town on Halloween night, including two estranged sisters who must come together to find a way to defeat this evil entity.",
+        "poster_path": "/zZzW0wUcyLXBLMSGasdvtLefwsL.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53
+        ],
+        "popularity": 6.2887,
+        "release_date": "2023-09-20",
+        "softcore": false,
+        "video": true,
+        "vote_average": 6.182,
+        "vote_count": 409
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/yKCyKxCAFvw0myHfIBZP0KBexNy.jpg",
+        "id": 138544,
+        "title": "American Horror House",
+        "original_title": "American Horror House",
+        "overview": "On Halloween night, a sorority house is overrun with ghosts, while a vengeful housemother goes on a killing spree.",
+        "poster_path": "/sZzJwqbrfKvGXTIhXGDwlJUEtM5.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          10770
+        ],
+        "popularity": 1.8742,
+        "release_date": "2012-10-13",
+        "softcore": false,
+        "video": false,
+        "vote_average": 5.9,
+        "vote_count": 43
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/evo3crueRIK9Eutb3lnDLVbD2xD.jpg",
+        "id": 514847,
+        "title": "The Hunt",
+        "original_title": "The Hunt",
+        "overview": "Twelve strangers wake up in a clearing. They don't know where they are\u2014or how they got there. In the shadow of a dark internet conspiracy theory, ruthless elitists gather at a remote location to hunt humans for sport. But their master plan is about to be derailed when one of the hunted turns the tables on her pursuers.",
+        "poster_path": "/wxPhn4ef1EAo5njxwBkAEVrlJJG.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          28,
+          53,
+          27
+        ],
+        "popularity": 13.4076,
+        "release_date": "2020-03-11",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.647,
+        "vote_count": 3750
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/3h1AXkYA1yazZaFPVA12FtmtYye.jpg",
+        "id": 761563,
+        "title": "Medusa",
+        "original_title": "Medusa",
+        "overview": "After being bitten by a lethal snake, a young woman experiences changes in her senses and appearance, as she sheds her old self and slowly turns into a deadly weapon.",
+        "poster_path": "/fs8RXnnJkYKo53R8A6eakzcTTHj.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          18,
+          14
+        ],
+        "popularity": 1.7631,
+        "release_date": "2020-11-07",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.189,
+        "vote_count": 196
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/7JI6ID1ga8uKyUPisjUXKxYCVRJ.jpg",
+        "id": 675531,
+        "title": "Dark Harvest",
+        "original_title": "Dark Harvest",
+        "overview": "In a small Midwestern town, a deadly annual ritual unfolds when the mythical nightmare, Sawtooth Jack, rises from the cornfields and challenges the town\u2019s teenage boys in a bloody battle of survival.",
+        "poster_path": "/sFBDjWdw8gHSI2dMivP7H52iwvp.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          14,
+          53
+        ],
+        "popularity": 4.6321,
+        "release_date": "2023-10-11",
+        "softcore": false,
+        "video": false,
+        "vote_average": 5.988,
+        "vote_count": 323
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/b0qfFTzpzDGNqK1NUdALroL2XLG.jpg",
+        "id": 777620,
+        "title": "Caged",
+        "original_title": "Caged",
+        "overview": "An African American male is imprisoned and placed in solitary confinement after being found guilty of murdering his wife, as he's haunted by internal demons and his dead wife, and pushed to the breaking point by an abusive female guard.",
+        "poster_path": "/8NUM43rtQSt0chumXGJPvnYb01I.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          53,
+          27,
+          18
+        ],
+        "popularity": 1.9489,
+        "release_date": "2021-01-26",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.252,
+        "vote_count": 123
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/j1AHOKhtIc3LmjugSy2K7IjDkSd.jpg",
+        "id": 27720,
+        "title": "Mr. Frost",
+        "original_title": "Mister Frost",
+        "overview": "Frost is arrested and committed for murder after he is apprehended burying his victims in the garden. However, even while under psychiatric care and tight hospital security, it becomes obvious that Mr. Frost is not all he seems to be.",
+        "poster_path": "/8v70cbt6Qqh044nNzKLkZ7q96Eb.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53,
+          18
+        ],
+        "popularity": 2.4053,
+        "release_date": "1990-04-10",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.22,
+        "vote_count": 50
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/ewWBAWyRGnLMm3kaqqb9XRUi47c.jpg",
+        "id": 392818,
+        "title": "The Transfiguration",
+        "original_title": "The Transfiguration",
+        "overview": "When troubled teen Milo, who has a fascination with vampire lore, meets the equally alienated Sophie, the two form a bond that begins to blur Milo's fantasy into reality.",
+        "poster_path": "/b7DWSZeP9Rxbmoase8RaIg6I369.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          18
+        ],
+        "popularity": 1.4976,
+        "release_date": "2016-04-14",
+        "softcore": false,
+        "video": false,
+        "vote_average": 5.996,
+        "vote_count": 137
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/jIQpY0P9I5h8dm2HkbzJSKfDpXR.jpg",
+        "id": 14795,
+        "title": "Baby Blues",
+        "original_title": "Baby Blues",
+        "overview": "On a secluded family farm, a mother suffers a psychotic break due to postpartum depression, forcing the eldest son to protect his sibling from the mother they have always known and loved.",
+        "poster_path": "/6CthGEm4pPQXnCBBQCZwlTHwYuV.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          18,
+          27,
+          53
+        ],
+        "popularity": 1.9698,
+        "release_date": "2008-08-05",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.01,
+        "vote_count": 104
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/p26c040MErns7DJYhisa1CpVB5i.jpg",
+        "id": 423108,
+        "title": "The Conjuring: The Devil Made Me Do It",
+        "original_title": "The Conjuring: The Devil Made Me Do It",
+        "overview": "Paranormal investigators Ed and Lorraine Warren encounter what would become one of the most sensational cases from their files. The fight for the soul of a young boy takes them beyond anything they'd ever seen before, to mark the first time in U.S. history that a murder suspect would claim demonic possession as a defense.",
+        "poster_path": "/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          9648,
+          53
+        ],
+        "popularity": 18.309,
+        "release_date": "2021-05-25",
+        "softcore": false,
+        "video": false,
+        "vote_average": 7.343,
+        "vote_count": 6640
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/AecGG1XVCmkk7fT10ko3FC0dLIP.jpg",
+        "id": 1043197,
+        "title": "Dust Bunny",
+        "original_title": "Dust Bunny",
+        "overview": "Ten-year-old Aurora asks her hitman neighbor to kill the monster under her bed that she claims ate her family. To protect her, he must battle an onslaught of assassins while accepting that some monsters are real.",
+        "poster_path": "/qa5aZpO8tQqhlDaE0flalS1TuIS.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          14,
+          28,
+          27
+        ],
+        "popularity": 16.7405,
+        "release_date": "2025-12-11",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.656,
+        "vote_count": 366
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/tMNCR3JQ7AsjmQ9ovUU0Ohg3RPB.jpg",
+        "id": 49365,
+        "title": "Lady in White",
+        "original_title": "Lady in White",
+        "overview": "Locked in a school closet during Halloween 1962, young Frank witnesses the ghost of a young girl and the man who murdered her years ago.",
+        "poster_path": "/AevfLQ5c0ZGtO3clHawg9L2XAQ2.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          9648,
+          27,
+          53
+        ],
+        "popularity": 2.9327,
+        "release_date": "1988-04-22",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.109,
+        "vote_count": 137
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/g1cMEQnEptUJ7Sv8SRjWBTTHyMv.jpg",
+        "id": 565028,
+        "title": "Candyman",
+        "original_title": "Candyman",
+        "overview": "A Chicago artist's sanity starts to unravel, unleashing a terrifying wave of violence when he begins to explore the macabre history of the Candyman.",
+        "poster_path": "/dqoshZPLNsXlC1qtz5n34raUyrE.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53
+        ],
+        "popularity": 6.3138,
+        "release_date": "2021-08-25",
+        "softcore": false,
+        "video": false,
+        "vote_average": 5.995,
+        "vote_count": 1809
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/ker1eyGYk5eIIPiveZYGHaW9aZ5.jpg",
+        "id": 1644,
+        "title": "The Vanishing",
+        "original_title": "The Vanishing",
+        "overview": "The boyfriend of an abducted woman never gives up the search as the abductor looks on.",
+        "poster_path": "/whCG6TGm3h9AHBkfh5M0MnJ8zT0.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          53,
+          18,
+          9648,
+          27
+        ],
+        "popularity": 4.8472,
+        "release_date": "1993-02-05",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.2,
+        "vote_count": 574
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/hldPY45usHEt6Zv73oxe1yKyUa0.jpg",
+        "id": 628707,
+        "title": "Trick",
+        "original_title": "Trick",
+        "overview": "A detective tries to track down a masked killer who reappears every Halloween to wreak bloody havoc.",
+        "poster_path": "/vxo4qqrhz61SnAUtlHIbYPzZoBU.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53
+        ],
+        "popularity": 3.0088,
+        "release_date": "2019-10-18",
+        "softcore": false,
+        "video": false,
+        "vote_average": 5.81,
+        "vote_count": 168
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/48LdnfGahm8LuM2cg7LFWEmrTEd.jpg",
+        "id": 1081208,
+        "title": "The Dogs",
+        "original_title": "The Dogs",
+        "overview": "After fleeing his psychotic father, a young teen and his mom seek refuge in a remote farmhouse, only to face a pack of ferocious dogs and the sinister spirits that haunt the property.",
+        "poster_path": "/kz6oqKyKCjmR8V1JdnF9brp9DSn.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53,
+          9648
+        ],
+        "popularity": 4.8702,
+        "release_date": "2025-06-13",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.619,
+        "vote_count": 63
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/jEt4V0Qb3g8frTl2MOwPORZthVH.jpg",
+        "id": 1160003,
+        "title": "Night of the Hunted",
+        "original_title": "Night of the Hunted",
+        "overview": "When an unsuspecting woman stops at a remote gas station in the dead of night, she's made the plaything of a sociopath sniper with a secret vendetta. To survive, she must not only dodge his bullets and fight for her life, but also figure out who wants her dead and why.",
+        "poster_path": "/84YOsylmgr181BHrTKlmaKs8IzV.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          9648,
+          53
+        ],
+        "popularity": 3.711,
+        "release_date": "2023-10-12",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.0,
+        "vote_count": 187
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/ocF2ZRaQ2QD4obmjhUM1p5mdpc4.jpg",
+        "id": 132137,
+        "title": "Werewolf: The Beast Among Us",
+        "original_title": "Werewolf: The Beast Among Us",
+        "overview": "Set in a 19th century village, a young man studying under a local doctor joins a team of hunters on the trail of a wolf-like creature.",
+        "poster_path": "/9VHFRTE8TWSL2ivZaVcUEu6ACc1.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          18,
+          27,
+          53
+        ],
+        "popularity": 3.5013,
+        "release_date": "2012-10-09",
+        "softcore": false,
+        "video": false,
+        "vote_average": 5.887,
+        "vote_count": 274
+      },
+      {
+        "adult": false,
+        "backdrop_path": "/lUbt7o9maj8DHEhnHvSv5tIzivg.jpg",
+        "id": 1020696,
+        "title": "Play Dead",
+        "original_title": "Play Dead",
+        "overview": "Criminology student Chloe fakes her own death to break into a morgue, in order to retrieve a piece of evidence that ties her younger brother to a crime gone wrong. Once inside, she discovers that a sadistic coroner is using the corpses for his sick and twisted business, and when he realises that Chloe still has a pulse, a terrifying game of cat and mouse ensues.",
+        "poster_path": "/zeiwFQzyMNp6JBwCfSspG5ZcoLp.jpg",
+        "media_type": "movie",
+        "original_language": "en",
+        "genre_ids": [
+          27,
+          53
+        ],
+        "popularity": 3.2699,
+        "release_date": "2022-12-09",
+        "softcore": false,
+        "video": false,
+        "vote_average": 6.107,
+        "vote_count": 210
+      }
+    ],
+    "total_pages": 38,
+    "total_results": 751
+  },
+  "keywords": {
+    "keywords": [
+      {
+        "id": 376091,
+        "name": "limiar"
+      },
+      {
+        "id": 376092,
+        "name": "horror movie"
+      }
+    ]
+  }
+}

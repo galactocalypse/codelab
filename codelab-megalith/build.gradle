@@ -8,6 +8,18 @@ group = 'com.codelab'
 version = '1.0.0'
 description = 'Codelab Megalith'
 
+// Two main classes live in this module (MegalithApplication and MovieFetcherApplication);
+// pinning the web app keeps resolveMainClassName, bootJar and bootRun unambiguous.
+springBoot {
+	mainClass = 'com.codelab.megalith.MegalithApplication'
+}
+
+// Pilots pin the heap explicitly: the JVM default (¼ of physical RAM) plus a full
+// swap has previously thrashed this box while ingesting.
+tasks.named('bootRun') {
+	maxHeapSize = '4g'
+}
+
 dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
