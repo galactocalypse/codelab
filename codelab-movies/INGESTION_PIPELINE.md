@@ -8,7 +8,7 @@ database through the Pulsar fan-out ingest in `codelab-megalith`.
 ```
 movie_fetcher/data/movies/*.json
    │  (1) MovieFeedRunner  — gated by movies.feed=true; streams *.json filenames, publishes
-   │      MovieEvent(id) keyed by the TMDB id → pending-movies topic (ids only, never parses)
+   │      MovieJob(id) keyed by the TMDB id → pending-movies job topic (ids only, never parses)
    ▼
 pending-movies  (Key_Shared, initialPosition=Earliest)
    │  (2) MovieProcessor  — subscriber movies.movies-processor, concurrency=4, DLQ maxRedeliver=3

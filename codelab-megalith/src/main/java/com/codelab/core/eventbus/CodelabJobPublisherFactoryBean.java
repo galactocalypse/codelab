@@ -1,6 +1,6 @@
 package com.codelab.core.eventbus;
 
-import com.codelab.common.spring.eventbus.CodelabEventPublisher;
+import com.codelab.common.spring.jobbus.CodelabJobPublisher;
 import java.lang.reflect.Proxy;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.api.Producer;
@@ -11,8 +11,12 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Factory bean for job publisher proxies — the job-path twin of {@link
+ * CodelabPublisherFactoryBean}.
+ */
 @RequiredArgsConstructor
-public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
+public class CodelabJobPublisherFactoryBean<E, T extends CodelabJobPublisher<E>>
     implements FactoryBean<T>, InitializingBean, DisposableBean {
 
   private final Class<T> publisherInterface;
@@ -29,7 +33,7 @@ public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
   @Override
   @SuppressWarnings("unchecked")
   public void afterPropertiesSet() throws Exception {
-    Schema<E> schema = Schema.JSON(payloadType); // or your schema-resolution strategy
+    Schema<E> schema = Schema.JSON(payloadType);
     producer = pulsarClient.newProducer(schema).topic(resolvedTopic).create();
 
     proxy =
@@ -37,7 +41,7 @@ public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
             Proxy.newProxyInstance(
                 publisherInterface.getClassLoader(),
                 new Class<?>[] {publisherInterface},
-                new PublisherInvocationHandler<>(
+                new JobPublisherInvocationHandler<>(
                     producer, payloadType, schema, resolvedTopic, maxMessageBytes));
   }
 

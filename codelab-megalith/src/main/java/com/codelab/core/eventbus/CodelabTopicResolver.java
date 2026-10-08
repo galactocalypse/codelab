@@ -2,6 +2,8 @@ package com.codelab.core.eventbus;
 
 import com.codelab.common.spring.eventbus.CodelabSubscription;
 import com.codelab.common.spring.eventbus.CodelabTopic;
+import com.codelab.common.spring.jobbus.CodelabJobSubscription;
+import com.codelab.common.spring.jobbus.CodelabJobTopic;
 import com.codelab.common.spring.persistence.CodelabModule;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
@@ -21,24 +23,20 @@ public final class CodelabTopicResolver {
 
   public static String resolveTopicName(
       String moduleName, CodelabSubscription annotation, Environment environment) {
-    String tenant = resolveTenant(environment, moduleName);
-    String namespace = environment.getRequiredProperty("app.pulsar.namespace");
-    if (!StringUtils.hasText(tenant)) {
-      throw new IllegalStateException(
-          "CodelabModule '" + moduleName + "' has no tenant configured");
-    }
-
-    if (!StringUtils.hasText(namespace)) {
-      throw new IllegalStateException("No namespace resolved for tenant '" + tenant + "'");
-    }
-
-    String topic = annotation.topic();
-    if (!StringUtils.hasText(topic)) {
+    if (!StringUtils.hasText(annotation.topic())) {
       throw new IllegalStateException(
           "@CodelabSubscription on a consumer interface must specify a non-blank topic name");
     }
+    return resolveTopicName(moduleName, annotation.topic(), environment);
+  }
 
-    return String.format("persistent://%s/%s/%s", tenant, namespace, topic);
+  public static String resolveTopicName(
+      String moduleName, CodelabJobSubscription annotation, Environment environment) {
+    if (!StringUtils.hasText(annotation.topic())) {
+      throw new IllegalStateException(
+          "@CodelabJobSubscription on a job consumer must specify a non-blank topic name");
+    }
+    return resolveTopicName(moduleName, annotation.topic(), environment);
   }
 
   /**
@@ -51,27 +49,55 @@ public final class CodelabTopicResolver {
    */
   public static String resolveTopicName(
       CodelabModule module, CodelabTopic annotation, Environment environment) {
-    String tenant = resolveTenant(environment, module.name());
+    return resolveTopicName(module.name(), annotation, environment);
+  }
+
+  public static String resolveTopicName(
+      String moduleName, CodelabTopic annotation, Environment environment) {
+    return resolveTopicName(
+        moduleName,
+        logicalTopic(annotation.value(), annotation.name(), "@CodelabTopic"),
+        environment);
+  }
+
+  public static String resolveTopicName(
+      String moduleName, CodelabJobTopic annotation, Environment environment) {
+    return resolveTopicName(
+        moduleName,
+        logicalTopic(annotation.value(), annotation.name(), "@CodelabJobTopic"),
+        environment);
+  }
+
+  /** Core composition shared by the annotation-typed overloads. */
+  public static String resolveTopicName(String moduleName, String topic, Environment environment) {
+    String tenant = resolveTenant(environment, moduleName);
     String namespace = environment.getRequiredProperty("app.pulsar.namespace");
     if (!StringUtils.hasText(tenant)) {
       throw new IllegalStateException(
-          "CodelabModule '" + module.name() + "' has no tenant configured");
+          "CodelabModule '" + moduleName + "' has no tenant configured");
     }
 
     if (!StringUtils.hasText(namespace)) {
-      throw new IllegalStateException(
-          "No namespace resolved for tenant '"
-              + tenant
-              + "' — check module config or "
-              + "@CodelabTopic(namespace=...) override on the annotation");
+      throw new IllegalStateException("No namespace resolved for tenant '" + tenant + "'");
     }
 
-    String topic = annotation.value();
     if (!StringUtils.hasText(topic)) {
       throw new IllegalStateException(
-          "@CodelabTopic on a publisher interface must specify a non-blank topic name");
+          "Topic name must be non-blank for tenant '"
+              + tenant
+              + "' — set the topic name on the publisher/consumer annotation");
     }
 
     return String.format("persistent://%s/%s/%s", tenant, namespace, topic);
+  }
+
+  private static String logicalTopic(String value, String name, String annotationLabel) {
+    if (StringUtils.hasText(value)) {
+      return value;
+    }
+    if (StringUtils.hasText(name)) {
+      return name;
+    }
+    throw new IllegalStateException(annotationLabel + " must specify a non-blank topic name");
   }
 }

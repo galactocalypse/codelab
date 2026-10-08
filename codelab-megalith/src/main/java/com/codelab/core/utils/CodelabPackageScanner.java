@@ -61,10 +61,10 @@ public class CodelabPackageScanner {
     A ann = AnnotatedElementUtils.findMergedAnnotation(clazz, requiredAnnotation);
     if (ann == null) {
       throw new IllegalStateException(
-          "Interface "
-              + clazz.getName()
-              + " extends CodelabEventConsumer but is "
-              + "missing the required @CodelabSubscription annotation.");
+          clazz.getName()
+              + " is missing the required @"
+              + requiredAnnotation.getSimpleName()
+              + " annotation.");
     }
     return ann;
   }

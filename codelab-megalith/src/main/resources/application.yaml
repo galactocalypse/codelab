@@ -43,3 +43,10 @@ app:
   pulsar:
     tenant.prefix: codelab-
     namespace: local
+    # App-level publish size caps, enforced in the publisher path before anything
+    # reaches the broker. Events stay small (a business fact); jobs may carry bulk
+    # payloads. The broker-side ceiling is docker-compose's PULSAR_PREFIX_maxMessageSize.
+    events:
+      max-message-size: 1KB
+    jobs:
+      max-message-size: 100KB

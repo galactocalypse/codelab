@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.codelab.movies.tmdb.model.MovieDetails;
-import com.codelab.movies.tmdb.parser.MovieEvent;
 import com.codelab.movies.tmdb.service.TmdbMovieImportService;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +41,7 @@ class MovieProcessorTest {
   void parsesTheFileNamedByTheEventAndPersistsIt() throws IOException {
     copyFixture("1704105.json");
 
-    processor.consume(new MovieEvent("1704105"));
+    processor.consume(new MovieJob("1704105"));
 
     ArgumentCaptor<MovieDetails> details = ArgumentCaptor.forClass(MovieDetails.class);
     verify(importService).persist(details.capture());
@@ -51,7 +50,7 @@ class MovieProcessorTest {
 
   @Test
   void acksMissingFilesWithoutPersisting() {
-    processor.consume(new MovieEvent("999999999"));
+    processor.consume(new MovieJob("999999999"));
 
     verify(importService, never()).persist(any());
   }
@@ -60,7 +59,7 @@ class MovieProcessorTest {
   void acksUnparseableFilesWithoutPersisting() throws IOException {
     Files.writeString(moviesDirectory.resolve("123.json"), "this is not json");
 
-    processor.consume(new MovieEvent("123"));
+    processor.consume(new MovieJob("123"));
 
     verify(importService, never()).persist(any());
   }
@@ -70,14 +69,14 @@ class MovieProcessorTest {
     // TMDB writes {} for movies it could not fetch; the id never reaches persist.
     Files.writeString(moviesDirectory.resolve("42.json"), "{}");
 
-    processor.consume(new MovieEvent("42"));
+    processor.consume(new MovieJob("42"));
 
     verify(importService, never()).persist(any());
   }
 
   @Test
   void acksEventsWithoutAnId() {
-    processor.consume(new MovieEvent());
+    processor.consume(new MovieJob());
     processor.consume(null);
 
     verify(importService, never()).persist(any());
@@ -88,7 +87,7 @@ class MovieProcessorTest {
     Files.writeString(moviesDirectory.resolve("7.json"), "{\"id\":7,\"title\":\"Seven\"}");
     when(importService.persist(any())).thenThrow(new DataIntegrityViolationException("boom"));
 
-    assertThatThrownBy(() -> processor.consume(new MovieEvent("7")))
+    assertThatThrownBy(() -> processor.consume(new MovieJob("7")))
         .isInstanceOf(DataIntegrityViolationException.class);
   }
 

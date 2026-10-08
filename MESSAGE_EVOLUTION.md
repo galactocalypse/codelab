@@ -1,6 +1,7 @@
 # Codelab message evolution & business-version contract
 
-**Status:** proposed — pending approval. No code was changed for this document.
+**Status:** implemented (§1–§6), then restructured per approval — see §7 for the final shape:
+CDC-emitted events, a separate version-less job bus, and message size caps.
 
 This design adds a **business version** to every Codelab pub/sub message: publishers are
 forced to declare the version of the event they are emitting, consumers declare which
@@ -280,3 +281,68 @@ the DLQ** — identical to the platform's existing DLQ semantics, minus the retr
 - Per-partition or per-key ordering guarantees across versions (mixed-version streams are the
   business's responsibility).
 - Runtime-refreshable version sets (the consumer's supported set is read once at startup).
+
+---
+
+## 7. Approved restructure: CDC-emitted events + a separate job bus
+
+The implementation went through a second design round in which three forks were decided:
+events are emitted by **full CDC**, heavy work moves to a **job bus** (with renamed
+annotations), and messages are size-capped **1KB (events) / 100KB (jobs)** at the app with a
+**1MB** broker-wide ceiling. The framework itself (§3 version gate, DLQ router, versioned
+contracts) is unchanged; the call sites and the bus split changed.
+
+### 7.1 Business events are emitted by CDC, not by services
+
+- `OrderServiceImpl` publishes nothing (this also removed a real ordering bug: `updateStatus`
+  used to publish *before* the flush).
+- Infra: Debezium Server (`quay.io/debezium/server:3.6.3.Final`, compose profile `debezium`)
+  captures `public.orders` via Postgres logical replication (`wal_level=logical` on the
+  postgres service command) and streams raw row envelopes to
+  `persistent://codelab-orders/local/orders-cdc.public.orders` — configured in
+  `docker/debezium/application.properties` (sink tenant/namespace mirror the module tenant;
+  plain JSON envelope, `tombstones.on.delete=false`, offsets on the `debezium_data` volume).
+- `OrderCdcNormalizer` (orders module) consumes that topic **as a job**
+  (`@CodelabJobSubscription`, subscription `orders-cdc-normalizer`, `Earliest`,
+  `deadLetterPolicyRef=orderCdcDeadLetterPolicy`) and maps row ops to events, stamping
+  `BusinessVersion.of("v1")` at the single point a domain event is born: `c` →
+  `OrderCreatedEvent` (keyed by orderId), `u` → `OrderUpdatedEvent` (unkeyed); `d`/`r`
+  ignored — the event contract covers create/update only. Events carry only `orderId`, so
+  no joins are needed from the row image (`CdcOrderChange`/`CdcOrderRow` model just `id`
+  plus `op`/`before`/`after` and ignore the rest of the envelope).
+
+### 7.2 Jobs are a separate contract: no business version, native retry
+
+Heavy async work is not a versioned fact. New commons package
+`com.codelab.common.spring.jobbus`:
+
+| | Events | Jobs |
+|---|---|---|
+| Publisher | `CodelabEventPublisher` — `publish(version, T)` | `CodelabJobPublisher` — `publish(T)` / `publish(key, T)` |
+| Consumer | `CodelabEventConsumer` — `consume` + `getSupportedBusinessVersions()` | `CodelabJobConsumer` — `consume` only |
+| Annotations | `@CodelabTopic`, `@CodelabSubscription` | `@CodelabJobTopic`, `@CodelabJobSubscription` |
+| Dispatcher | `CodelabVersionAwareMessageDispatcher` (gate → `CodelabDlqRouter`) | `CodelabJobMessageDispatcher` (decode → delegate, failures propagate) |
+| On failure | unsupported version → DLQ without retry; processing failure → nack → `DeadLetterPolicy` | nack → `DeadLetterPolicy` (no gate at all) |
+| Defaults | `Key_Shared`, `Latest`, concurrency 1, `ackTimeoutSeconds=60` | same annotation defaults |
+
+- Job consumers: `MovieProcessor` (`pending-movies` / `movies-processor`) and
+  `OrderCdcNormalizer`. Job publisher: `MovieJobPublisher` — payload `MovieJob`, renamed
+  from `MovieEvent` along with the runner/processor.
+- `OrderCreatedEventPublisher`/`OrderUpdatedEventPublisher` stay on the **event** bus: they
+  are the normalizer's bridge onto the versioned side.
+- Registration: `CodelabPulsarRegistryUtils` runs two publisher passes (event contracts +
+  job contracts) over one shared `CodelabTopicRegistry`, and scans both consumer contracts
+  when building endpoints; `CodelabPulsarListenerConfigurer` picks the dispatcher per
+  contract.
+
+### 7.3 Message size caps
+
+- **App level**, enforced in the publisher handlers *before* the producer is touched
+  (`MessageSizeGuard` → `CodelabMessageSizeExceededException`): keys
+  `app.pulsar.events.max-message-size` (default `1KB`) and `app.pulsar.jobs.max-message-size`
+  (default `100KB`) in the megalith `application.yaml`, parsed with Spring's `DataSize`.
+- **Infra level:** Pulsar's `maxMessageSize` is broker-wide (no per-topic override), so
+  docker-compose sets `PULSAR_PREFIX_maxMessageSize=1048576` (**1MB**) via the existing
+  `apply-config-from-env.py` step (the key is absent from `standalone.conf`; the script adds
+  missing keys). This also bounds what Debezium can write — a full `orders` row is far below
+  it.

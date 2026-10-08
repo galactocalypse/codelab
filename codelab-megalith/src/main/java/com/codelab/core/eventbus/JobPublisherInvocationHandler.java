@@ -1,15 +1,19 @@
 package com.codelab.core.eventbus;
 
-import com.codelab.common.spring.eventbus.BusinessVersion;
-import com.codelab.common.spring.eventbus.CodelabMessageProperties;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import lombok.AllArgsConstructor;
 import org.apache.pulsar.client.api.Producer;
+import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.client.api.Schema;
 
+/**
+ * Invocation handler for {@link com.codelab.common.spring.jobbus.CodelabJobPublisher} proxies.
+ * Unlike {@link PublisherInvocationHandler} it stamps no business-version property — jobs are not
+ * version-gated — but it enforces the job-side app message size cap before the send.
+ */
 @AllArgsConstructor
-class PublisherInvocationHandler<E> implements InvocationHandler {
+class JobPublisherInvocationHandler<E> implements InvocationHandler {
 
   private final Producer<E> producer;
   private final Class<E> payloadType;
@@ -27,35 +31,29 @@ class PublisherInvocationHandler<E> implements InvocationHandler {
     }
 
     if ("publish".equals(method.getName())) {
-      if (args == null) {
+      if (args == null || args.length == 0) {
         throw new IllegalArgumentException("Missing publish arguments");
       }
 
-      if (args.length == 2 && args[0] instanceof BusinessVersion version) {
-        E event = validatePayload(args[1]);
-        MessageSizeGuard.enforce(schema, event, topic, "Event", maxMessageBytes);
-        return producer
-            .newMessage()
-            .property(CodelabMessageProperties.BUSINESS_VERSION, version.value())
-            .value(event)
-            .send();
+      if (args.length == 1) {
+        return send(null, validatePayload(args[0]));
       }
 
-      if (args.length == 3
-          && args[0] instanceof String key
-          && args[1] instanceof BusinessVersion version) {
-        E event = validatePayload(args[2]);
-        MessageSizeGuard.enforce(schema, event, topic, "Event", maxMessageBytes);
-        return producer
-            .newMessage()
-            .property(CodelabMessageProperties.BUSINESS_VERSION, version.value())
-            .key(key)
-            .value(event)
-            .send();
+      if (args.length == 2 && args[0] instanceof String key) {
+        return send(key, validatePayload(args[1]));
       }
     }
 
-    throw new UnsupportedOperationException("Unexpected method on publisher proxy: " + method);
+    throw new UnsupportedOperationException("Unexpected method on job publisher proxy: " + method);
+  }
+
+  private Object send(String key, E job) throws PulsarClientException {
+    MessageSizeGuard.enforce(schema, job, topic, "Job", maxMessageBytes);
+    var builder = producer.newMessage().value(job);
+    if (key != null) {
+      builder.key(key);
+    }
+    return builder.send();
   }
 
   @SuppressWarnings("unchecked")
