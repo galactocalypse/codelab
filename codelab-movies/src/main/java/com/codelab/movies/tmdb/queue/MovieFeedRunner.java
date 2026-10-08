@@ -1,5 +1,6 @@
 package com.codelab.movies.tmdb.queue;
 
+import com.codelab.common.spring.eventbus.BusinessVersion;
 import com.codelab.movies.tmdb.parser.MovieEvent;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -37,6 +38,7 @@ public class MovieFeedRunner implements CommandLineRunner {
   public void run(String... args) throws IOException {
     long published = 0;
     long startNanos = System.nanoTime();
+    BusinessVersion version = BusinessVersion.of("v1");
     log.info(
         "Feeding movie ids from {}{}", moviesDirectory, limit > 0 ? " (limit " + limit + ")" : "");
 
@@ -47,7 +49,7 @@ public class MovieFeedRunner implements CommandLineRunner {
         }
         String fileName = file.getFileName().toString();
         String id = fileName.substring(0, fileName.length() - ".json".length());
-        publisher.publish(id, new MovieEvent(id));
+        publisher.publish(id, version, new MovieEvent(id));
         published++;
         if (published % 10_000 == 0) {
           log.info("...{} movie ids published in {}s", published, elapsedSeconds(startNanos));

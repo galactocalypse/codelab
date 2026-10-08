@@ -1,5 +1,6 @@
 package com.codelab.movies.tmdb.queue;
 
+import com.codelab.common.spring.eventbus.BusinessVersion;
 import com.codelab.common.spring.eventbus.CodelabEventConsumer;
 import com.codelab.common.spring.eventbus.CodelabSubscription;
 import com.codelab.movies.tmdb.model.MovieDetails;
@@ -9,6 +10,7 @@ import com.codelab.movies.tmdb.service.TmdbMovieImportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.api.SubscriptionInitialPosition;
@@ -54,6 +56,12 @@ public class MovieProcessor implements CodelabEventConsumer<MovieEvent> {
           String moviesDirectory) {
     this.importService = importService;
     this.moviesDirectory = Path.of(moviesDirectory);
+  }
+
+  @Override
+  public Set<BusinessVersion> getSupportedBusinessVersions() {
+    // LEGACY covers pre-versioning messages already sitting in the Earliest backlog.
+    return Set.of(BusinessVersion.of("v1"), BusinessVersion.LEGACY);
   }
 
   @Override

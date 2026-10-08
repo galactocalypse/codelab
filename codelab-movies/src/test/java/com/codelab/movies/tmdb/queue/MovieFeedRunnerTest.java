@@ -2,6 +2,7 @@ package com.codelab.movies.tmdb.queue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.codelab.common.spring.eventbus.BusinessVersion;
 import com.codelab.movies.tmdb.parser.MovieEvent;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,12 +61,12 @@ class MovieFeedRunnerTest {
     private final Map<String, MovieEvent> events = new LinkedHashMap<>();
 
     @Override
-    public void publish(MovieEvent event) {
-      publish(null, event);
+    public void publish(BusinessVersion version, MovieEvent event) {
+      publish(null, version, event);
     }
 
     @Override
-    public void publish(String key, MovieEvent event) {
+    public void publish(String key, BusinessVersion version, MovieEvent event) {
       events.put(key, event);
     }
   }

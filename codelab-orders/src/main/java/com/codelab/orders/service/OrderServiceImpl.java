@@ -1,5 +1,6 @@
 package com.codelab.orders.service;
 
+import com.codelab.common.spring.eventbus.BusinessVersion;
 import com.codelab.orders.entity.OrderEntity;
 import com.codelab.orders.entity.ProductEntity;
 import com.codelab.orders.exception.OrderNotFoundException;
@@ -22,7 +23,10 @@ public class OrderServiceImpl implements OrderService {
 
   public CreateOrderResponse createOrder(CreateOrderRequest request) {
     OrderEntity createdOrder = repository.save(buildEntity(request));
-    publisher.publish(Long.toString(createdOrder.getId()), OrderCreatedEvent.from(createdOrder));
+    publisher.publish(
+        Long.toString(createdOrder.getId()),
+        BusinessVersion.of("v1"),
+        OrderCreatedEvent.from(createdOrder));
     return CreateOrderResponse.from(createdOrder);
   }
 
@@ -34,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
             .orElseThrow(
                 () -> new OrderNotFoundException(String.format("Order %s not found", orderId)));
     order.setStatus(request.getTargetStatus());
-    updatePublisher.publish(OrderUpdatedEvent.from(order));
+    updatePublisher.publish(BusinessVersion.of("v1"), OrderUpdatedEvent.from(order));
     return UpdateOrderResponse.from(repository.save(order));
   }
 

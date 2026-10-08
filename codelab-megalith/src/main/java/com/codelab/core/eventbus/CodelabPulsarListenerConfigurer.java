@@ -1,19 +1,23 @@
 package com.codelab.core.eventbus;
 
+import com.codelab.common.spring.eventbus.BusinessVersion;
 import com.codelab.common.spring.eventbus.CodelabEventConsumer;
 import com.codelab.common.spring.eventbus.CodelabSubscription;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.api.DeadLetterPolicy;
+import org.apache.pulsar.client.api.Message;
 import org.apache.pulsar.common.schema.SchemaType;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
@@ -24,6 +28,7 @@ import org.springframework.pulsar.config.PulsarListenerEndpoint;
 import org.springframework.pulsar.config.PulsarListenerEndpointRegistrar;
 import org.springframework.pulsar.listener.AckMode;
 import org.springframework.util.Assert;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 @Slf4j
@@ -31,8 +36,14 @@ import org.springframework.util.StringUtils;
 public class CodelabPulsarListenerConfigurer
     implements PulsarListenerConfigurer, ResourceLoaderAware, EnvironmentAware {
 
+  /** The framework listener method: version gate + payload decode + DLQ routing. */
+  private static final Method DISPATCH_METHOD =
+      ReflectionUtils.findMethod(
+          CodelabVersionAwareMessageDispatcher.class, "dispatch", Message.class);
+
   private final ConfigurableListableBeanFactory beanFactory;
   private final MessageHandlerMethodFactory messageHandlerMethodFactory;
+  private final CodelabDlqRouter codelabDlqRouter;
 
   @Setter private Environment environment;
   @Setter private ResourceLoader resourceLoader;
@@ -72,19 +83,59 @@ public class CodelabPulsarListenerConfigurer
                 .formatted(beanName));
     String resolvedTopic =
         CodelabTopicResolver.resolveTopicName(moduleName, subscription, environment);
+    String qualifiedSubscriptionName =
+        CodelabSubscriptionResolver.resolveSubscriptionName(
+            moduleName, subscription.subscriptionName());
 
-    MethodPulsarListenerEndpoint<V> endpoint = new MethodPulsarListenerEndpoint<>();
+    // The version contract is enforced at startup: a consumer that can't handle *any* version —
+    // or can't state its payload type — is a wiring bug, not a runtime surprise.
+    Set<BusinessVersion> supportedVersions = consumerBean.getSupportedBusinessVersions();
+    Assert.notEmpty(
+        supportedVersions,
+        () ->
+            "Consumer '%s' declares no supported business versions"
+                .formatted(targetClass.getSimpleName()));
+    Class<?> payloadType =
+        ResolvableType.forClass(targetClass).as(CodelabEventConsumer.class).getGeneric(0).resolve();
+    Assert.state(
+        payloadType != null,
+        () ->
+            "Consumer '%s' must parameterize CodelabEventConsumer<T>"
+                .formatted(targetClass.getName()));
+    // keep validating the consume(T) shape even though the endpoint now points at the dispatcher
+    findConsumeMethod(targetClass);
+
+    DeadLetterPolicy deadLetterPolicy =
+        resolveDeadLetterPolicy(subscription, beanName, targetClass);
+    String dlqTopic =
+        deadLetterPolicy != null && StringUtils.hasText(deadLetterPolicy.getDeadLetterTopic())
+            ? deadLetterPolicy.getDeadLetterTopic()
+            // mirrors Pulsar's own convention (RetryMessageUtil.getDLQTopic): topic + "-" + sub +
+            // "-DLQ"
+            : resolvedTopic + "-" + qualifiedSubscriptionName + "-DLQ";
+
+    CodelabVersionAwareMessageDispatcher<V> dispatcher =
+        new CodelabVersionAwareMessageDispatcher<>(
+            (CodelabEventConsumer<V>) consumerBean,
+            (Class<V>) payloadType,
+            supportedVersions,
+            dlqTopic,
+            qualifiedSubscriptionName,
+            codelabDlqRouter);
+
+    MethodPulsarListenerEndpoint<byte[]> endpoint = new MethodPulsarListenerEndpoint<>();
     endpoint.setId(beanName + "-codelabListener");
-    endpoint.setBean(consumerBean);
-    endpoint.setMethod(findConsumeMethod(targetClass));
+    endpoint.setBean(dispatcher);
+    endpoint.setMethod(DISPATCH_METHOD);
     endpoint.setMessageHandlerMethodFactory(messageHandlerMethodFactory);
+    // SchemaType.NONE with the dispatcher's Message<byte[]> parameter resolves to Schema.BYTES
+    // (DefaultSchemaResolver maps byte[] → BYTES), so the version gate runs on message
+    // properties before any deserialization; the dispatcher decodes with Schema.JSON(payloadType).
     endpoint.setSchemaType(SchemaType.NONE);
     endpoint.setAckMode(AckMode.RECORD);
 
     endpoint.setTopics(resolvedTopic);
-    endpoint.setSubscriptionName(
-        CodelabSubscriptionResolver.resolveSubscriptionName(
-            moduleName, subscription.subscriptionName()));
+    endpoint.setSubscriptionName(qualifiedSubscriptionName);
     endpoint.setSubscriptionType(subscription.type());
     endpoint.setConcurrency(subscription.concurrency());
 
@@ -96,17 +147,34 @@ public class CodelabPulsarListenerConfigurer
           builder.ackTimeout(subscription.ackTimeoutSeconds(), TimeUnit.SECONDS);
         });
 
-    if (StringUtils.hasText(subscription.deadLetterPolicyRef())) {
-      Object policyBean = beanFactory.getBean(subscription.deadLetterPolicyRef());
-      Assert.state(
-          policyBean instanceof DeadLetterPolicy,
-          () ->
-              "deadLetterPolicyRef '%s' on %s must be a DeadLetterPolicy bean"
-                  .formatted(subscription.deadLetterPolicyRef(), targetClass.getName()));
-      endpoint.setDeadLetterPolicy((DeadLetterPolicy) policyBean);
+    if (deadLetterPolicy != null) {
+      endpoint.setDeadLetterPolicy(deadLetterPolicy);
     }
 
+    log.debug(
+        "Registered listener {} for {} on {} (payload {}, versions {}, DLQ {})",
+        beanName,
+        targetClass.getSimpleName(),
+        resolvedTopic,
+        payloadType.getSimpleName(),
+        supportedVersions,
+        dlqTopic);
+
     return endpoint;
+  }
+
+  private DeadLetterPolicy resolveDeadLetterPolicy(
+      CodelabSubscription subscription, String beanName, Class<?> targetClass) {
+    if (!StringUtils.hasText(subscription.deadLetterPolicyRef())) {
+      return null;
+    }
+    Object policyBean = beanFactory.getBean(subscription.deadLetterPolicyRef());
+    Assert.state(
+        policyBean instanceof DeadLetterPolicy,
+        () ->
+            "deadLetterPolicyRef '%s' on %s must be a DeadLetterPolicy bean"
+                .formatted(subscription.deadLetterPolicyRef(), targetClass.getName()));
+    return (DeadLetterPolicy) policyBean;
   }
 
   private Method findConsumeMethod(Class<?> targetClass) {
