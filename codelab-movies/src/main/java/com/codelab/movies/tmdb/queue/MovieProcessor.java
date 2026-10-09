@@ -1,10 +1,9 @@
 package com.codelab.movies.tmdb.queue;
 
-import com.codelab.common.spring.eventbus.CodelabEventConsumer;
-import com.codelab.common.spring.eventbus.CodelabSubscription;
+import com.codelab.common.spring.jobbus.CodelabJobConsumer;
+import com.codelab.common.spring.jobbus.CodelabJobSubscription;
 import com.codelab.movies.tmdb.model.MovieDetails;
 import com.codelab.movies.tmdb.parser.MovieDetailsLoader;
-import com.codelab.movies.tmdb.parser.MovieEvent;
 import com.codelab.movies.tmdb.service.TmdbMovieImportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Files;
@@ -18,8 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
  * Consumes movie ids from the {@code pending-movies} topic and imports the matching JSON file from
  * {@code ${movies.directory}}.
  *
- * <p>File name == TMDB id, so the event only has to name the file; parsing happens here, one file
- * per message, which is what bounds memory on the consumer side.
+ * <p>File name == TMDB id, so the job only has to name the file; parsing happens here, one file per
+ * message, which is what bounds memory on the consumer side.
  *
  * <p>Data problems (missing file, empty {@code {}} marker, unparseable JSON) are counted and acked
  * — they would fail identically on every redelivery, so retrying them only builds a DLQ of
@@ -28,13 +27,13 @@ import org.springframework.beans.factory.annotation.Value;
  * topic rather than redelivering forever against {@code ackTimeoutSeconds = 60}.
  */
 @Slf4j
-@CodelabSubscription(
+@CodelabJobSubscription(
     topic = "pending-movies",
     subscriptionName = "movies-processor",
     initialPosition = SubscriptionInitialPosition.Earliest,
     concurrency = 4,
     deadLetterPolicyRef = "movieDeadLetterPolicy")
-public class MovieProcessor implements CodelabEventConsumer<MovieEvent> {
+public class MovieProcessor implements CodelabJobConsumer<MovieJob> {
 
   private static final long PROGRESS_EVERY = 1_000;
 
@@ -57,18 +56,18 @@ public class MovieProcessor implements CodelabEventConsumer<MovieEvent> {
   }
 
   @Override
-  public void consume(MovieEvent event) {
+  public void consume(MovieJob job) {
     startedNanos.compareAndSet(0, System.nanoTime());
     try {
-      if (event == null || event.getId() == null || event.getId().isBlank()) {
+      if (job == null || job.getId() == null || job.getId().isBlank()) {
         skipped.incrementAndGet();
         return;
       }
 
-      Path file = moviesDirectory.resolve(event.getId() + ".json");
+      Path file = moviesDirectory.resolve(job.getId() + ".json");
       if (!Files.isRegularFile(file)) {
         skipped.incrementAndGet();
-        log.debug("No movie file {} for id {}", file, event.getId());
+        log.debug("No movie file {} for id {}", file, job.getId());
         return;
       }
 
@@ -91,7 +90,7 @@ public class MovieProcessor implements CodelabEventConsumer<MovieEvent> {
       imported.incrementAndGet();
     } catch (RuntimeException e) {
       failed.incrementAndGet();
-      log.warn("Import failed for movie {}", event == null ? null : event.getId(), e);
+      log.warn("Import failed for movie {}", job == null ? null : job.getId(), e);
       throw e;
     } finally {
       progress();

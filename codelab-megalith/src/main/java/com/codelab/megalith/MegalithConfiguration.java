@@ -1,7 +1,9 @@
 package com.codelab.megalith;
 
 import com.codelab.core.CodelabModuleRegistrar;
+import com.codelab.core.eventbus.CodelabDlqRouter;
 import com.codelab.core.eventbus.CodelabPulsarListenerConfigurer;
+import org.apache.pulsar.client.api.PulsarClient;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +28,15 @@ public class MegalithConfiguration {
   @Bean
   public CodelabPulsarListenerConfigurer pulsarListenerConfigurer(
       ConfigurableListableBeanFactory beanFactory,
-      MessageHandlerMethodFactory codelabPulsarHandlerMethodFactory) {
-    return new CodelabPulsarListenerConfigurer(beanFactory, codelabPulsarHandlerMethodFactory);
+      MessageHandlerMethodFactory codelabPulsarHandlerMethodFactory,
+      CodelabDlqRouter codelabDlqRouter) {
+    return new CodelabPulsarListenerConfigurer(
+        beanFactory, codelabPulsarHandlerMethodFactory, codelabDlqRouter);
+  }
+
+  @Bean
+  public CodelabDlqRouter codelabDlqRouter(PulsarClient pulsarClient) {
+    return new CodelabDlqRouter(pulsarClient);
   }
 
   @Bean

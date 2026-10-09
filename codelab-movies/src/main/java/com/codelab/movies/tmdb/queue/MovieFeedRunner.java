@@ -1,6 +1,5 @@
 package com.codelab.movies.tmdb.queue;
 
-import com.codelab.movies.tmdb.parser.MovieEvent;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -20,14 +19,14 @@ import org.springframework.boot.CommandLineRunner;
 @Slf4j
 public class MovieFeedRunner implements CommandLineRunner {
 
-  private final MovieEventPublisher publisher;
+  private final MovieJobPublisher publisher;
   private final Path moviesDirectory;
   private final long limit;
 
   /**
    * @param limit maximum number of ids to publish; {@code 0} feeds the whole directory
    */
-  public MovieFeedRunner(MovieEventPublisher publisher, Path moviesDirectory, long limit) {
+  public MovieFeedRunner(MovieJobPublisher publisher, Path moviesDirectory, long limit) {
     this.publisher = publisher;
     this.moviesDirectory = moviesDirectory;
     this.limit = limit;
@@ -47,7 +46,7 @@ public class MovieFeedRunner implements CommandLineRunner {
         }
         String fileName = file.getFileName().toString();
         String id = fileName.substring(0, fileName.length() - ".json".length());
-        publisher.publish(id, new MovieEvent(id));
+        publisher.publish(id, new MovieJob(id));
         published++;
         if (published % 10_000 == 0) {
           log.info("...{} movie ids published in {}s", published, elapsedSeconds(startNanos));

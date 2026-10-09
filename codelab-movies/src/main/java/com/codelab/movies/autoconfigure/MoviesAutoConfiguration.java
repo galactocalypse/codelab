@@ -1,7 +1,7 @@
 package com.codelab.movies.autoconfigure;
 
-import com.codelab.movies.tmdb.queue.MovieEventPublisher;
 import com.codelab.movies.tmdb.queue.MovieFeedRunner;
+import com.codelab.movies.tmdb.queue.MovieJobPublisher;
 import com.codelab.movies.tmdb.service.TmdbMovieImportService;
 import com.codelab.movies.tmdb.service.TmdbMovieMapper;
 import java.nio.file.Path;
@@ -29,7 +29,7 @@ public class MoviesAutoConfiguration {
   @Bean
   @ConditionalOnProperty(name = "movies.feed", havingValue = "true")
   public MovieFeedRunner movieFeedRunner(
-      MovieEventPublisher publisher,
+      MovieJobPublisher publisher,
       @Value("${movies.directory:/home/adarsh/code/movie_fetcher/data/movies}")
           String moviesDirectory,
       @Value("${movies.feed.limit:0}") long limit) {

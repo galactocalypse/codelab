@@ -18,6 +18,7 @@ public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
   private final Class<T> publisherInterface;
   private final String resolvedTopic;
   private final Class<E> payloadType;
+  private final long maxMessageBytes;
 
   @Autowired
   private PulsarClient pulsarClient; // injected normally, since this bean IS in the app context
@@ -36,7 +37,8 @@ public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
             Proxy.newProxyInstance(
                 publisherInterface.getClassLoader(),
                 new Class<?>[] {publisherInterface},
-                new PublisherInvocationHandler<>(producer, payloadType));
+                new PublisherInvocationHandler<>(
+                    producer, payloadType, schema, resolvedTopic, maxMessageBytes));
   }
 
   @Override
@@ -45,7 +47,7 @@ public class CodelabPublisherFactoryBean<E, T extends CodelabEventPublisher<E>>
   }
 
   @Override
-  public Class<T> getObjectType() {
+  public Class<?> getObjectType() {
     return publisherInterface;
   }
 

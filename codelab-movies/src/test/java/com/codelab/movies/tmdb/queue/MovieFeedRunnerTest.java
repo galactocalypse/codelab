@@ -2,7 +2,6 @@ package com.codelab.movies.tmdb.queue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codelab.movies.tmdb.parser.MovieEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,18 +54,18 @@ class MovieFeedRunnerTest {
     Files.writeString(moviesDirectory.resolve(fileName), "{}");
   }
 
-  private static final class RecordingPublisher implements MovieEventPublisher {
+  private static final class RecordingPublisher implements MovieJobPublisher {
 
-    private final Map<String, MovieEvent> events = new LinkedHashMap<>();
+    private final Map<String, MovieJob> events = new LinkedHashMap<>();
 
     @Override
-    public void publish(MovieEvent event) {
-      publish(null, event);
+    public void publish(MovieJob job) {
+      publish(null, job);
     }
 
     @Override
-    public void publish(String key, MovieEvent event) {
-      events.put(key, event);
+    public void publish(String key, MovieJob job) {
+      events.put(key, job);
     }
   }
 }
