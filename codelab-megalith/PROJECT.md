@@ -109,6 +109,17 @@ and `app.pulsar.jobs.max-message-size` (default 100KB) in `application.yaml`. Pu
 broker-wide (no per-topic override), so compose additionally sets `PULSAR_PREFIX_maxMessageSize=1048576` (1MB)
 as the hard infra ceiling.
 
+**End-to-end test.** `CdcJobEventEndToEndTest` (`src/test/.../e2e`) proves the whole CDC → event path against a
+real broker via Testcontainers `PulsarContainer`: a Debezium-shaped insert envelope is seeded onto
+`job.orders-cdc.public.orders`, the real `OrderCdcNormalizer` job consumer turns it into a version-stamped
+`OrderCreatedEvent` through the real publisher proxy, and a recording event consumer observes it on
+`event.created-orders`. It boots `CdcEndToEndApplication` — the messaging wiring without JPA (the module
+registrar is restricted to publishers/subscriptions) — and provisions the module tenant/namespace in the
+container, since a fresh broker starts with only `public/default`. Debezium itself is out of the loop (the
+envelope is seeded directly), keeping the test fast and deterministic; it is skipped when Docker is absent.
+The application-driven job bus is verified separately by `JobBusEndToEndTest`: it manually publishes through
+the real job-publisher proxy and asserts a real job consumer receives it (jobs are never produced by CDC).
+
 ### TMDB ingestion (fan-out ingest)
 
 The bulk TMDB load in `codelab-movies` reuses the messaging stack above as a resumable, idempotent pipeline:

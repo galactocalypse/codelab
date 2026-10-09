@@ -40,6 +40,11 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// Broker-level end-to-end test for the CDC -> job -> event loop runs against a real Pulsar.
+	testImplementation platform('org.testcontainers:testcontainers-bom:2.0.5')
+	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+	testImplementation 'org.testcontainers:testcontainers-pulsar'
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	testCompileOnly 'org.projectlombok:lombok'

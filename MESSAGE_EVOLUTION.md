@@ -268,6 +268,18 @@ the DLQ** — identical to the platform's existing DLQ semantics, minus the retr
   processes normally; DLQ entry carries full metadata. Also verifies the `BYTES` consumer
   attaches cleanly to the JSON-schema topic (default broker `schemaValidationEnforced=false`;
   `Schema.BYTES` is universally allowed — recommended to prove in-test).
+- **Broker-level E2E** (Testcontainers, automated): `CdcJobEventEndToEndTest` boots the messaging
+  stack over a real standalone Pulsar container and asserts that a seeded Debezium insert envelope
+  on `job.orders-cdc.public.orders` is normalized into a version-stamped `OrderCreatedEvent` and
+  observed on `event.created-orders`. This exercises the kind-prefixed names at both ends, the real
+  JSON producer/consumer schemas, the registered subscription topology, and the version gate on live
+  traffic. Debezium is out of the loop (envelope seeded directly) so the test stays fast and
+  deterministic; it is skipped when Docker is unavailable.
+- **Broker-level job E2E** (Testcontainers, automated): `JobBusEndToEndTest` covers the
+  application-driven job path — a manual publish through the real `CodelabJobPublisher` proxy
+  (size guard, keying, no version property) consumed by a real `CodelabJobConsumer` listener.
+  Jobs are never produced by CDC, so this is the only way the job-publish handler is exercised
+  against a broker.
 - `./gradlew spotlessApply check` per the repo runbook (movies + megalith).
 
 ## 6. Explicitly out of scope (future candidates)
