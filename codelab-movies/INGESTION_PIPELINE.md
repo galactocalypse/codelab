@@ -8,9 +8,9 @@ database through the Pulsar fan-out ingest in `codelab-megalith`.
 ```
 movie_fetcher/data/movies/*.json
    │  (1) MovieFeedRunner  — gated by movies.feed=true; streams *.json filenames, publishes
-   │      MovieJob(id) keyed by the TMDB id → pending-movies job topic (ids only, never parses)
+   │      MovieJob(id) keyed by the TMDB id → job.pending-movies job topic (ids only, never parses)
    ▼
-pending-movies  (Key_Shared, initialPosition=Earliest)
+job.pending-movies  (Key_Shared, initialPosition=Earliest)
    │  (2) MovieProcessor  — subscriber movies.movies-processor, concurrency=4, DLQ maxRedeliver=3
    │      reads <dir>/<id>.json; skips missing file / "{}" 404-marker / id==0 / parse failure (acked);
    │      otherwise parses MovieDetails → TmdbMovieImportService.persist
@@ -21,7 +21,7 @@ tmdb_* tables in the "movies" database
    │      companies, countries, languages, collections) resolved via bounded in-JVM caches; people via
    │      getReferenceById lazy proxies (no SELECT per cast/crew row).
    ▼
-errors rethrown → ≤3 redeliveries → DLQ pending-movies-movies.movies-processor-DLQ
+errors rethrown → ≤3 redeliveries → DLQ job.pending-movies-movies.movies-processor-DLQ
 ```
 
 ## Prerequisites
@@ -68,7 +68,7 @@ Run in the background (`nohup ... &`) and tail the log. `show-sql`/`format_sql` 
 1. **Queue** — this Pulsar build has **no `delete-subscription`**; deleting the topic drops the subscription too:
 
    ```bash
-   docker exec pulsar bin/pulsar-admin persistent delete persistent://codelab-movies/local/pending-movies
+   docker exec pulsar bin/pulsar-admin persistent delete persistent://codelab-movies/local/job.pending-movies
    ```
 
 2. **Schema** (only when you want to wipe data — re-running *without* this is safe and idempotent):
@@ -86,7 +86,7 @@ Run in the background (`nohup ... &`) and tail the log. `show-sql`/`format_sql` 
 
 ```bash
 # topic status: watch backlog → 0, msgRateRedeliver, unacked
-docker exec pulsar bin/pulsar-admin persistent stats persistent://codelab-movies/local/pending-movies
+docker exec pulsar bin/pulsar-admin persistent stats persistent://codelab-movies/local/job.pending-movies
 
 # data lives in the 'movies' DATABASE, not 'codelab'
 docker exec postgres psql -U postgres -d movies -t -c "SELECT count(*) FROM tmdb_movies;"

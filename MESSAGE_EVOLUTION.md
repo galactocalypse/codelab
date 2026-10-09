@@ -26,7 +26,8 @@ framework wiring in `codelab-megalith`/`com.codelab.core.eventbus`.
 - `@CodelabTopic(name)` on an interface extending `CodelabEventPublisher<T>`:
   `codelab-commons/.../eventbus/CodelabTopic.java`, `CodelabEventPublisher.java`.
 - `CodelabPulsarRegistryUtils.registerPulsarPublishers(...)` scans each module for those
-  interfaces, resolves the physical topic (`persistent://codelab-<module>/<ns>/<logical>`),
+  interfaces, resolves the physical topic
+  (`persistent://codelab-<module>/<ns>/<kind>.<logical>` — the kind prefix is §7.4),
   and registers a `CodelabPublisherFactoryBean`.
 - `CodelabPublisherFactoryBean` builds a `Schema.JSON(payloadType)` producer and a JDK
   proxy; `PublisherInvocationHandler` (`codelab-megalith/.../eventbus/PublisherInvocationHandler.java`)
@@ -192,7 +193,7 @@ New `CodelabDlqRouter` bean (megalith, `com.codelab.core.eventbus`, registered i
 - if the subscription has a `deadLetterPolicyRef` whose policy sets an explicit
   `deadLetterTopic` ⇒ use it;
 - else ⇒ `{resolvedTopic}-{qualifiedSubscription}-DLQ`
-  (e.g. `persistent://codelab-movies/local/pending-movies-movies.movies-processor-DLQ` —
+  (e.g. `persistent://codelab-movies/local/job.pending-movies-movies.movies-processor-DLQ` —
   matches what the native policy already writes today).
 
 This means version-unsupported entries and nack-exhausted processing-failure entries land
@@ -262,7 +263,7 @@ the DLQ** — identical to the platform's existing DLQ semantics, minus the retr
   exception propagates (negative-ack path).
 - **Unit:** router — payload bytes identical, all original properties preserved, `key` /
   `eventTime` preserved, `codelab.dlq.*` metadata present.
-- **Integration** (docker-compose pulsar profile): publish `v1`+`v2` on `pending-movies`,
+- **Integration** (docker-compose pulsar profile): publish `v1`+`v2` on `job.pending-movies`,
   consumer supports only `v1` ⇒ `v2` lands in the DLQ with **zero** redeliveries while `v1`
   processes normally; DLQ entry carries full metadata. Also verifies the `BYTES` consumer
   attaches cleanly to the JSON-schema topic (default broker `schemaValidationEnforced=false`;
@@ -286,10 +287,11 @@ the DLQ** — identical to the platform's existing DLQ semantics, minus the retr
 
 ## 7. Approved restructure: CDC-emitted events + a separate job bus
 
-The implementation went through a second design round in which three forks were decided:
+The implementation went through a second design round in which four forks were decided:
 events are emitted by **full CDC**, heavy work moves to a **job bus** (with renamed
-annotations), and messages are size-capped **1KB (events) / 100KB (jobs)** at the app with a
-**1MB** broker-wide ceiling. The framework itself (§3 version gate, DLQ router, versioned
+annotations), messages are size-capped **1KB (events) / 100KB (jobs)** at the app with a
+**1MB** broker-wide ceiling, and every physical topic carries a **kind prefix** (`event.*`
+/ `job.*`, §7.4). The framework itself (§3 version gate, DLQ router, versioned
 contracts) is unchanged; the call sites and the bus split changed.
 
 ### 7.1 Business events are emitted by CDC, not by services
@@ -299,9 +301,11 @@ contracts) is unchanged; the call sites and the bus split changed.
 - Infra: Debezium Server (`quay.io/debezium/server:3.6.3.Final`, compose profile `debezium`)
   captures `public.orders` via Postgres logical replication (`wal_level=logical` on the
   postgres service command) and streams raw row envelopes to
-  `persistent://codelab-orders/local/orders-cdc.public.orders` — configured in
-  `docker/debezium/application.properties` (sink tenant/namespace mirror the module tenant;
-  plain JSON envelope, `tombstones.on.delete=false`, offsets on the `debezium_data` volume).
+  `persistent://codelab-orders/local/job.orders-cdc.public.orders` — configured in
+  `docker/debezium/application.properties` (its `topic.prefix=job.orders-cdc` carries the
+  job kind prefix so the produce side matches what the framework resolves on the consume
+  side; sink tenant/namespace mirror the module tenant; plain JSON envelope,
+  `tombstones.on.delete=false`, offsets on the `debezium_data` volume).
 - `OrderCdcNormalizer` (orders module) consumes that topic **as a job**
   (`@CodelabJobSubscription`, subscription `orders-cdc-normalizer`, `Earliest`,
   `deadLetterPolicyRef=orderCdcDeadLetterPolicy`) and maps row ops to events, stamping
@@ -346,3 +350,26 @@ Heavy async work is not a versioned fact. New commons package
   `apply-config-from-env.py` step (the key is absent from `standalone.conf`; the script adds
   missing keys). This also bounds what Debezium can write — a full `orders` row is far below
   it.
+
+### 7.4 Topic kind prefixes: events and jobs are structurally disjoint
+
+Before this fork the two buses shared one naming scheme — `event.created-orders` and a job
+`created-orders` would have resolved to the *same* physical topic inside a module's tenant.
+Now every physical topic carries its kind as a name prefix, applied by
+`CodelabTopicResolver` at **both** ends: the publish path (annotation scans in
+`CodelabPulsarRegistryUtils`) and the consume path (endpoint resolution in
+`CodelabPulsarListenerConfigurer`) go through the same kind-aware resolver, so producer and
+consumer can never disagree.
+
+- Config: `app.pulsar.events.topic-prefix` (default `event`) and
+  `app.pulsar.jobs.topic-prefix` (default `job`) in the megalith `application.yaml`.
+- A **blank** configured value disables prefixing — the escape hatch for topics produced
+  outside the framework.
+- Physical names today: `persistent://codelab-orders/local/event.created-orders`,
+  `.../job.pending-movies`, `.../job.orders-cdc.public.orders`. The logical names written
+  in annotations are unchanged (no `event.`/`job.` in source).
+- Debezium's `topic.prefix` is set to `job.orders-cdc`, so its produce-side
+  `<topic.prefix>.<schema>.<table>` matches the consume-side resolution of
+  `@CodelabJobSubscription(topic = "orders-cdc.public.orders")`.
+- DLQ names derive from the resolved topic, so they inherit the prefix automatically
+  (e.g. `job.pending-movies-movies.movies-processor-DLQ`).

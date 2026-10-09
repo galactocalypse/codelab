@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 class PublisherInvocationHandlerTest {
 
-  private static final String TOPIC = "persistent://codelab-orders/local/created-orders";
+  private static final String TOPIC = "persistent://codelab-orders/local/event.created-orders";
   private static final long MAX_BYTES = 1024;
 
   @SuppressWarnings("unchecked")

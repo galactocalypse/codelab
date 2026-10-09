@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 class JobPublisherInvocationHandlerTest {
 
-  private static final String TOPIC = "persistent://codelab-movies/local/pending-movies";
+  private static final String TOPIC = "persistent://codelab-movies/local/job.pending-movies";
   private static final long MAX_BYTES = 1024;
 
   @SuppressWarnings("unchecked")

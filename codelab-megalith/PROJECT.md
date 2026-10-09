@@ -43,7 +43,9 @@ Per-module wiring specifics:
 
 Megalith uses Apache Pulsar for messaging, exposing thin interfaces that piggyback on Spring Boot's Pulsar starter
 implementation. Each module is mapped to a dedicated Pulsar tenant. Topics and subscriptions are internally
-namespaced to the module.
+namespaced to the module, and every physical topic carries a kind prefix — `event.<name>` or `job.<name>`
+(`app.pulsar.events.topic-prefix` / `app.pulsar.jobs.topic-prefix`, applied by `CodelabTopicResolver` on both the
+publish and consume paths, so the two buses are structurally disjoint inside a module's tenant).
 
 There are two buses with different contracts (full design in `../MESSAGE_EVOLUTION.md`):
 
@@ -58,7 +60,8 @@ public interface OrderCreatedEventPublisher extends CodelabEventPublisher<OrderC
 createdPublisher.publish(orderId, BusinessVersion.of("v1"), OrderCreatedEvent.builder().orderId(orderId).build());
 ```
 No service in this repo publishes domain events directly: CDC does. Debezium Server (compose profile `debezium`)
-captures the `orders` table via logical replication onto `persistent://codelab-orders/local/orders-cdc.public.orders`,
+captures the `orders` table via logical replication onto `persistent://codelab-orders/local/job.orders-cdc.public.orders`
+(the `job.` prefix comes from `topic.prefix` in the Debezium config, mirroring `app.pulsar.jobs.topic-prefix`),
 and `OrderCdcNormalizer` turns row changes into version-stamped events — `c` → `OrderCreatedEvent` (keyed),
 `u` → `OrderUpdatedEvent`, everything else ignored. This also means ordering is handled by the DB (a status update
 published *after* the flush), and `OrderServiceImpl` has zero messaging knowledge.
@@ -111,12 +114,12 @@ as the hard infra ceiling.
 The bulk TMDB load in `codelab-movies` reuses the messaging stack above as a resumable, idempotent pipeline:
 
 - **Feeder** — `MovieFeedRunner` streams `*.json` file names from `--movies.directory` and publishes one
-  `MovieJob(id)` per file, keyed by the TMDB id, onto the `pending-movies` job topic. It is a gated bean behind
+  `MovieJob(id)` per file, keyed by the TMDB id, onto the `job.pending-movies` job topic. It is a gated bean behind
   `movies.feed=true` so a normal web boot never feeds; `--movies.feed.limit=N` gates pilots. Only ids are published
   (never parsed), so memory is bounded by the ~60 MB topic rather than the 35 GB corpus.
 - **Consumer** — `MovieProcessor` (a `CodelabJobConsumer`) subscribes as `movies.movies-processor` with
   `initialPosition=Earliest`, `Key_Shared`, `concurrency=4`, and a `DeadLetterPolicy` (`maxRedeliverCount=3`) referencing DLQ topic
-  `pending-movies-movies.movies-processor-DLQ`. It resolves `${movies.directory}/<id>.json`, skips missing files,
+  `job.pending-movies-movies.movies-processor-DLQ`. It resolves `${movies.directory}/<id>.json`, skips missing files,
   `{}` 404-markers, `id == 0`, and unparseable JSON (acked, never redelivered); everything else is parsed and handed
   to `TmdbMovieImportService.persist` — one JPA transaction per message.
 - **Persistence is idempotent** — natural TMDB ids as `@Id` (no `@GeneratedValue`); `persist` branches on

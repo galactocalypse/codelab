@@ -59,7 +59,7 @@ public class CodelabPulsarRegistryUtils {
         CodelabEventPublisher.class,
         CodelabTopic.class,
         CodelabPublisherFactoryBean.class,
-        "event",
+        CodelabTopicResolver.TopicKind.EVENT,
         maxMessageBytes(
             environment, EVENTS_MAX_MESSAGE_SIZE_PROPERTY, DEFAULT_EVENTS_MAX_MESSAGE_SIZE),
         topicRegistry);
@@ -70,7 +70,7 @@ public class CodelabPulsarRegistryUtils {
         CodelabJobPublisher.class,
         CodelabJobTopic.class,
         CodelabJobPublisherFactoryBean.class,
-        "job",
+        CodelabTopicResolver.TopicKind.JOB,
         maxMessageBytes(environment, JOBS_MAX_MESSAGE_SIZE_PROPERTY, DEFAULT_JOBS_MAX_MESSAGE_SIZE),
         topicRegistry);
   }
@@ -106,7 +106,7 @@ public class CodelabPulsarRegistryUtils {
       Class<?> contractType,
       Class<A> topicAnnotationType,
       Class<?> factoryBeanClass,
-      String kind,
+      CodelabTopicResolver.TopicKind kind,
       long maxMessageBytes,
       CodelabTopicRegistry topicRegistry) {
     if (module.basePackage() == null) {
@@ -164,7 +164,7 @@ public class CodelabPulsarRegistryUtils {
 
       String resolvedTopic =
           CodelabTopicResolver.resolveTopicName(
-              module.name(), logicalTopic(topicAnno), environment);
+              module.name(), kind, logicalTopic(topicAnno), environment);
       topicRegistry.validateNoDuplicateTopic(resolvedTopic, publisherIface);
 
       BeanDefinitionBuilder bdBuilder =
@@ -179,7 +179,7 @@ public class CodelabPulsarRegistryUtils {
       registry.registerBeanDefinition(beanName, bdBuilder.getBeanDefinition());
       log.debug(
           "Registered {} publisher {} on {} (payload {}, max {} bytes)",
-          kind,
+          kind.defaultPrefix(),
           beanName,
           resolvedTopic,
           payloadType.resolve().getSimpleName(),

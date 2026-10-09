@@ -43,10 +43,16 @@ app:
   pulsar:
     tenant.prefix: codelab-
     namespace: local
+    # Kind prefixes: every physical topic is .../event.<name> or .../job.<name>, applied
+    # by CodelabTopicResolver at both publisher and listener registration. Keeps the two
+    # buses structurally disjoint within a module's tenant; blank disables (escape hatch
+    # for externally-produced topics such as Debezium's — those must match by config).
     # App-level publish size caps, enforced in the publisher path before anything
     # reaches the broker. Events stay small (a business fact); jobs may carry bulk
     # payloads. The broker-side ceiling is docker-compose's PULSAR_PREFIX_maxMessageSize.
     events:
+      topic-prefix: event
       max-message-size: 1KB
     jobs:
+      topic-prefix: job
       max-message-size: 100KB
