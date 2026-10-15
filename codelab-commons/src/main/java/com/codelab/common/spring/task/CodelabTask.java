@@ -8,7 +8,7 @@ package com.codelab.common.spring.task;
  * CodelabTaskSpec} and live under the module base package) and are instantiated only when they are
  * the selected task, so a normal web boot never pays for them. A task runs against the megalith's
  * {@code ApplicationContext} — it may use the module's repositories, services, and Pulsar producers
- * — and must be a one-shot, bounded unit of work (see {@code HEADLESS_ENTRY_POINTS.md}).
+ * — and must be a one-shot, bounded unit of work (see {@code docs/platform/HEADLESS_ENTRY_POINTS.md}).
  *
  * <p>Task-specific arguments are read from the context's {@code ApplicationArguments} (inject it
  * via the task's constructor) rather than from the contract.

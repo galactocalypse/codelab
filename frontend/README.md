@@ -30,3 +30,9 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+## Architecture
+
+See `MICROFRONTENDS.md` for the modular frontend (microfrontend-style) architecture:
+independently built module packages composed into this container under `/orders`,
+`/movies`, etc.
