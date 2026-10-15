@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /** Feeder tests: which files are published, and where the {@code movies.feed.limit} gate stops. */
-class MovieFeedRunnerTest {
+class MovieFeedTaskTest {
 
   @TempDir Path moviesDirectory;
 
@@ -23,7 +23,7 @@ class MovieFeedRunnerTest {
     Files.writeString(moviesDirectory.resolve("notes.txt"), "not a movie");
 
     RecordingPublisher publisher = new RecordingPublisher();
-    new MovieFeedRunner(publisher, moviesDirectory, 0).run();
+    new MovieFeedTask(publisher, moviesDirectory.toString(), 0).run();
 
     assertThat(publisher.events).containsOnlyKeys("1", "2", "3");
     assertThat(publisher.events.get("1").getId()).isEqualTo("1");
@@ -36,7 +36,7 @@ class MovieFeedRunnerTest {
     write("3.json");
 
     RecordingPublisher publisher = new RecordingPublisher();
-    new MovieFeedRunner(publisher, moviesDirectory, 2).run();
+    new MovieFeedTask(publisher, moviesDirectory.toString(), 2).run();
 
     assertThat(publisher.events).hasSize(2);
   }
@@ -45,7 +45,7 @@ class MovieFeedRunnerTest {
   void publishesNothingForAnEmptyDirectory() throws IOException {
     RecordingPublisher publisher = new RecordingPublisher();
 
-    new MovieFeedRunner(publisher, moviesDirectory, 0).run();
+    new MovieFeedTask(publisher, moviesDirectory.toString(), 0).run();
 
     assertThat(publisher.events).isEmpty();
   }

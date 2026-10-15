@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * One unit of work on the movie ingest job stream: the TMDB id of a file to import. Job payloads
- * carry no business version — the contract is owned end-to-end by {@link MovieFeedRunner} and
- * {@link MovieProcessor}.
+ * carry no business version — the contract is owned end-to-end by {@link MovieFeedTask} and {@link
+ * MovieProcessor}.
  */
 @Data
 @Builder

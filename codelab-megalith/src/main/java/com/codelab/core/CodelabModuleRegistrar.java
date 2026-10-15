@@ -3,6 +3,9 @@ package com.codelab.core;
 import com.codelab.common.spring.persistence.CodelabModule;
 import com.codelab.core.eventbus.CodelabPulsarRegistryUtils;
 import com.codelab.core.jpa.CodelabJpaRegistryUtils;
+import com.codelab.core.task.CodelabTaskDescriptor;
+import com.codelab.core.task.CodelabTaskRegistryUtils;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -44,11 +47,14 @@ public class CodelabModuleRegistrar
             .build();
     List<CodelabModule> modules = ModuleUtils.loadModules(resourceLoader);
 
+    List<CodelabTaskDescriptor> taskDescriptors = new ArrayList<>();
     for (CodelabModule module : modules) {
       CodelabJpaRegistryUtils.registerJpaBeans(module, context);
       CodelabPulsarRegistryUtils.registerPulsarPublishers(module, context);
       CodelabPulsarRegistryUtils.registerPulsarSubscriptions(module, context);
+      taskDescriptors.addAll(CodelabTaskRegistryUtils.registerTasks(module, context));
     }
+    CodelabTaskRegistryUtils.registerCatalog(taskDescriptors, context);
   }
 
   @Override

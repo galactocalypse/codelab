@@ -7,8 +7,8 @@ database through the Pulsar fan-out ingest in `codelab-megalith`.
 
 ```
 movie_fetcher/data/movies/*.json
-   │  (1) MovieFeedRunner  — gated by movies.feed=true; streams *.json filenames, publishes
-   │      MovieJob(id) keyed by the TMDB id → job.pending-movies job topic (ids only, never parses)
+   │  (1) MovieFeedTask  — headless task --codelab.task=movies.feed; streams *.json filenames,
+   │      publishes MovieJob(id) keyed by the TMDB id → job.pending-movies job topic (ids only, never parses)
    ▼
 job.pending-movies  (Key_Shared, initialPosition=Earliest)
    │  (2) MovieProcessor  — subscriber movies.movies-processor, concurrency=4, DLQ maxRedeliver=3
@@ -47,7 +47,7 @@ From `codelab-megalith`:
 
 ```bash
 ./gradlew bootRun --args='\
-  --movies.feed=true \
+  --codelab.task=movies.feed \
   --movies.feed.limit=1000 \
   --movies.directory=/home/adarsh/code/movie_fetcher/data/movies \
   --spring.jpa.show-sql=false \
@@ -59,9 +59,33 @@ Run in the background (`nohup ... &`) and tail the log. `show-sql`/`format_sql` 
 
 | Flag | Meaning |
 |---|---|
-| `--movies.feed=true` | run the feeder bean (a normal web boot never feeds) |
+| `--codelab.task=movies.feed` | run the feeder task (a normal web boot runs no task) |
 | `--movies.feed.limit=N` | feed only the first N `*.json` files (0/default = entire directory) |
 | `--movies.directory=...` | corpus root; default points at the real dump |
+
+## Offline genre histogram (`movies.import`)
+
+`MovieImportTask` (`codelab-movies`, `tmdb/queue`) is a one-shot diagnostic: it walks
+`${movies.directory}`, parses every file in-process and prints a genre histogram. It never touches the
+queue or the database — it is the parse-side counterpart to `MovieFeedTask`, and is a headless task
+selected by `--codelab.task=movies.import` so a normal web boot never runs it.
+
+Invocation is **always from `codelab-megalith`**: `codelab-movies` is a library and owns no context or
+infrastructure (no DataSource, Pulsar client, or `main`), so this task is only instantiated when the
+megalith builds its ApplicationContext. Because that context wires every module's persistence and
+messaging at startup, **Postgres and Pulsar must be running even though the job uses neither**:
+
+```bash
+cd codelab-megalith
+./gradlew bootRun --args='\
+  --codelab.task=movies.import \
+  --movies.directory=/home/adarsh/code/movie_fetcher/data/movies'
+```
+
+The `--codelab.task` selector makes the megalith boot headless (`WebApplicationType.NONE`) and exit with
+the task's code, so `bootRun` returns once the task completes instead of holding `:8080` — no separate
+`--spring.main.web-application-type=none` needed. Requires the usual prerequisite: `codelab-movies`
+built and published to mavenLocal after any change.
 
 ## Reset runbook
 
@@ -79,7 +103,7 @@ Run in the background (`nohup ... &`) and tail the log. `show-sql`/`format_sql` 
 
    Restart the megalith once so `ddl-auto: update` recreates the `tmdb_*` tables (plus the demo tables).
 
-3. **Feed** — restart with `--movies.feed=true`. Republishing over an existing subscription is harmless:
+3. **Feed** — restart with `--codelab.task=movies.feed`. Republishing over an existing subscription is harmless:
    `persist` is idempotent, so duplicates converge.
 
 ## Monitor / verify
@@ -116,7 +140,7 @@ Consequence: re-imports rewrite the `@OneToMany` children in place (orphan-delet
 ids churn across re-imports while row counts stay flat — by design.
 
 To re-import a specific subset of ids (e.g. movies that failed a previous run), point `--movies.directory` at a
-folder containing `<id>.json` files (symlinks work) and feed it with `--movies.feed=true`; only those movies are
+folder containing `<id>.json` files (symlinks work) and feed it with `--codelab.task=movies.feed`; only those movies are
 touched.
 
 ## Post-load indexes

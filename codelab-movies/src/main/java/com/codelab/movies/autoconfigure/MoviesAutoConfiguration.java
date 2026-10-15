@@ -1,14 +1,9 @@
 package com.codelab.movies.autoconfigure;
 
-import com.codelab.movies.tmdb.queue.MovieFeedRunner;
-import com.codelab.movies.tmdb.queue.MovieJobPublisher;
 import com.codelab.movies.tmdb.service.TmdbMovieImportService;
 import com.codelab.movies.tmdb.service.TmdbMovieMapper;
-import java.nio.file.Path;
 import org.apache.pulsar.client.api.DeadLetterPolicy;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
@@ -23,16 +18,5 @@ public class MoviesAutoConfiguration {
   @Bean
   public DeadLetterPolicy movieDeadLetterPolicy() {
     return DeadLetterPolicy.builder().maxRedeliverCount(3).build();
-  }
-
-  /** Feeds ids onto the pending-movies topic; only active when {@code --movies.feed=true}. */
-  @Bean
-  @ConditionalOnProperty(name = "movies.feed", havingValue = "true")
-  public MovieFeedRunner movieFeedRunner(
-      MovieJobPublisher publisher,
-      @Value("${movies.directory:/home/adarsh/code/movie_fetcher/data/movies}")
-          String moviesDirectory,
-      @Value("${movies.feed.limit:0}") long limit) {
-    return new MovieFeedRunner(publisher, Path.of(moviesDirectory), limit);
   }
 }

@@ -117,6 +117,39 @@ real broker via Testcontainers `PulsarContainer`: a Debezium-shaped insert envel
 registrar is restricted to publishers/subscriptions) — and provisions the module tenant/namespace in the
 container, since a fresh broker starts with only `public/default`. Debezium itself is out of the loop (the
 envelope is seeded directly), keeping the test fast and deterministic; it is skipped when Docker is absent.
+
+### Headless tasks
+
+Modules can expose **headless entry points** — operator/dev-invoked one-shot units of work (imports, feeds,
+backfills, diagnostics, admin commands) — as `CodelabTask`s. A task is `int run() throws Exception` marked with
+`@CodelabTaskSpec("name")` and lives under the module base package; `CodelabModuleRegistrar` discovers it with the
+same per-module scan used for topics/subscriptions and registers it as a **lazy** singleton bean. No task is
+instantiated at boot.
+
+A single dispatcher, `CodelabTaskRunner`, owns selection via one namespaced selector:
+
+| Invocation | Behavior |
+|---|---|
+| (no selector) | Normal web boot; nothing runs |
+| `--codelab.task=list` | List every registered task (name, module, description) |
+| `--codelab.task=<name>` | Run exactly that task and exit with its code (2 if unknown, 1 if it throws) |
+
+`MegalithApplication.main` detects the selector, forces `WebApplicationType.NONE`, and exits via
+`SpringApplication.exit(...)` with the task's code — so the one-shot/exit plumbing is centralized. Only ids are
+published by the movie feeder (never parsed) and the diagnostic touches neither queue nor DB.
+
+Invocation:
+
+```bash
+./gradlew bootRun --args='--codelab.task=list'
+./gradlew bootRun --args='--codelab.task=movies.feed'
+./gradlew bootRun --args='--codelab.task=movies.import'
+```
+
+The abstraction is deliberately narrow: it is for a finite set of named, manually-invoked, one-at-a-time units of
+work that run against the application context — **not** continuous consumers, `@Scheduled` jobs, or request-path
+work (use `CodelabJobConsumer`/`CodelabEventConsumer`, Spring scheduling, or a REST controller respectively). See
+`HEADLESS_ENTRY_POINTS.md` at the repo root for the problem, rationale, and applicability table.
 The application-driven job bus is verified separately by `JobBusEndToEndTest`: it manually publishes through
 the real job-publisher proxy and asserts a real job consumer receives it (jobs are never produced by CDC).
 
@@ -124,10 +157,11 @@ the real job-publisher proxy and asserts a real job consumer receives it (jobs a
 
 The bulk TMDB load in `codelab-movies` reuses the messaging stack above as a resumable, idempotent pipeline:
 
-- **Feeder** — `MovieFeedRunner` streams `*.json` file names from `--movies.directory` and publishes one
-  `MovieJob(id)` per file, keyed by the TMDB id, onto the `job.pending-movies` job topic. It is a gated bean behind
-  `movies.feed=true` so a normal web boot never feeds; `--movies.feed.limit=N` gates pilots. Only ids are published
-  (never parsed), so memory is bounded by the ~60 MB topic rather than the 35 GB corpus.
+- **Feeder** — `MovieFeedTask` (`--codelab.task=movies.feed`) streams `*.json` file names from
+  `${movies.directory}` and publishes one `MovieJob(id)` per file, keyed by the TMDB id, onto the
+  `job.pending-movies` job topic. It is a headless task (see "Headless tasks" below), so a normal web
+  boot never feeds; `movies.feed.limit=N` gates pilots. Only ids are published (never parsed), so
+  memory is bounded by the ~60 MB topic rather than the 35 GB corpus.
 - **Consumer** — `MovieProcessor` (a `CodelabJobConsumer`) subscribes as `movies.movies-processor` with
   `initialPosition=Earliest`, `Key_Shared`, `concurrency=4`, and a `DeadLetterPolicy` (`maxRedeliverCount=3`) referencing DLQ topic
   `job.pending-movies-movies.movies-processor-DLQ`. It resolves `${movies.directory}/<id>.json`, skips missing files,
@@ -140,3 +174,8 @@ The bulk TMDB load in `codelab-movies` reuses the messaging stack above as a res
   children — see `codelab-movies/INGESTION_PIPELINE.md` for why.
 - **`Earliest` is load-bearing** — the `@CodelabJobSubscription` wiring default (Latest) would make a recreated
   subscription silently skip a re-feed.
+- **Offline diagnostic** — `MovieImportTask` (`--codelab.task=movies.import`) parses `${movies.directory}`
+  in-process and prints a genre histogram, touching neither the queue nor the DB. Like the feeder it is a
+  library class in `codelab-movies`, so its invocation context is always this module: run it with
+  `bootRun --args='--codelab.task=movies.import'`. See `codelab-movies/INGESTION_PIPELINE.md` for the
+  full command.
