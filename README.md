@@ -29,6 +29,7 @@ with its own `gradlew`/`settings.gradle`. Run Gradle from *inside* the module di
 | `codelab-megalith` | The running application / module container. Owns per-module DataSource/EntityManagerFactory/TransactionManager/Pulsar registration. **Start here.** |
 | `codelab-movies` | `CodelabModule` for movies: TMDB persistence layer and the Pulsar ingestion pipeline. |
 | `codelab-orders` | `CodelabModule` for orders: demo CRUD plus the CDC → event pipeline. |
+| `codelab-todos` | `CodelabModule` for todos: todo lists with a deadline, items with notes, and done/undone toggling (no auth). |
 | `frontend` | Generated TypeScript/OpenAPI client (React + Vite) for the megalith's REST API. |
 | `docker-compose.yml` | Local infra; containers are gated behind `--profile` flags. |
 
@@ -150,6 +151,8 @@ cd codelab-megalith
   idempotent fan-out ingestion pipeline: `movies.feed` publishes `MovieJob(id)` per `*.json` file;
   `MovieProcessor` parses and persists one JPA transaction per message. See
   `codelab-movies/INGESTION_PIPELINE.md` for the full runbook.
+- **Todos** — todo lists (one shared deadline per list) with items that carry ad-hoc notes and a
+  done/undone toggle, exposed at `/api/todos`. No users/auth. See `codelab-todos/README.md`.
 
 ## Frontend
 
@@ -185,5 +188,6 @@ on unformatted code.
 | `codelab-movies/INGESTION_PIPELINE.md` | End-to-end TMDB ingestion runbook and reset/monitoring commands. |
 | `codelab-gradle/README.md` | Build plugin/settings plugin conventions and usage. |
 | `codelab-orders/README.md` | Orders module. |
+| `codelab-todos/README.md` | Todos module (lists, items, notes, done/undone). |
 | `frontend/README.md` | Generated OpenAPI client. |
 | `AGENTS.md` | Contributor notes for AI agents working in this repo. |

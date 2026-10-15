@@ -8,6 +8,7 @@ import com.codelab.core.eventbus.CodelabPulsarRegistryUtils;
 import com.codelab.movies.autoconfigure.MoviesAutoConfiguration;
 import com.codelab.orders.autoconfigure.OrdersAutoConfiguration;
 import com.codelab.sample.autoconfigure.SampleAutoConfiguration;
+import com.codelab.todos.autoconfigure.TodosAutoConfiguration;
 import java.util.Map;
 import org.apache.pulsar.client.api.DeadLetterPolicy;
 import org.apache.pulsar.client.api.PulsarClient;
@@ -55,7 +56,8 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
       DataJpaRepositoriesAutoConfiguration.class,
       OrdersAutoConfiguration.class,
       MoviesAutoConfiguration.class,
-      SampleAutoConfiguration.class
+      SampleAutoConfiguration.class,
+      TodosAutoConfiguration.class
     })
 public class CdcEndToEndApplication {
 

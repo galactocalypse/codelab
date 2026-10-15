@@ -26,6 +26,7 @@ dependencies {
 	implementation 'com.codelab:codelab-movies:1.0.0'
 	implementation 'com.codelab:codelab-orders:1.0.0'
 	implementation 'com.codelab:codelab-sample:1.0.0'
+	implementation 'com.codelab:codelab-todos:1.0.0'
 
 	annotationProcessor platform('com.codelab:codelab-bom:1.0.0')
 	annotationProcessor 'org.projectlombok:lombok'

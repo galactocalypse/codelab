@@ -18,6 +18,7 @@ with its own `gradlew`/`settings.gradle`. Run Gradle commands *inside* the modul
 | `codelab-movies` | `CodelabModule` for movies; TMDB persistence layer and Pulsar ingestion pipeline. |
 | `codelab-orders` | `CodelabModule` for orders; demo CRUD plus CDC -> event pipeline. |
 | `codelab-sample` | Tiny reference module demonstrating every megalith feature (dynamic data source, events, jobs, manual tasks). **Read this first as an agent.** |
+| `codelab-todos` | `CodelabModule` for todo lists + items (deadline per list, notes per item, done/undone). REST-only, no auth. |
 | `frontend` | Generated TypeScript/OpenAPI client (React + Vite). |
 | `docker-compose.yml` | Local infra; containers gated behind `--profile` flags (postgres, pulsar, pulsar-manager, redis, cassandra, neo4j, debezium). |
 
@@ -76,6 +77,7 @@ with its own `gradlew`/`settings.gradle`. Run Gradle commands *inside* the modul
 | `codelab-gradle/README.md` | Build plugin/settings plugin conventions and usage. |
 | `codelab-orders/README.md` | Orders module. |
 | `codelab-sample/README.md` | Reference module walkthrough. |
+| `codelab-todos/README.md` | Todos module (lists, items, notes, done/undone, REST surface). |
 | `frontend/README.md` | Generated OpenAPI client. |
 | `codelab-movies/HELP.md`, `codelab-megalith/HELP.md` | spring-initializr boilerplate. |
 | `AGENTS.md` | This file: contributor notes for AI agents. |
