@@ -180,8 +180,8 @@ on unformatted code.
 | Doc | What it covers |
 |---|---|
 | `codelab-megalith/PROJECT.md` | Megalith architecture: module registry, per-module persistence, messaging, headless tasks, TMDB fan-out. |
-| `MESSAGE_EVOLUTION.md` | Event vs job bus design, business-version contract, CDC emission, DLQ routing, size caps. |
-| `HEADLESS_ENTRY_POINTS.md` | Problem, rationale, and implemented design of the `CodelabTask` SPI. |
+| `docs/platform/MESSAGE_EVOLUTION.md` | Event vs job bus design, business-version contract, CDC emission, DLQ routing, size caps. |
+| `docs/platform/HEADLESS_ENTRY_POINTS.md` | Problem, rationale, and implemented design of the `CodelabTask` SPI. |
 | `codelab-movies/INGESTION_PIPELINE.md` | End-to-end TMDB ingestion runbook and reset/monitoring commands. |
 | `codelab-gradle/README.md` | Build plugin/settings plugin conventions and usage. |
 | `codelab-orders/README.md` | Orders module. |
