@@ -1,7 +1,10 @@
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
 
-import MoviePage from "@/pages/movies/MoviePage";
-import MoviesPage from "@/pages/movies/MoviesPage";
+import TodoListPage from "@/pages/todos/TodoListPage";
+import TodosPage from "@/pages/todos/TodosPage";
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `text-sm transition-colors ${isActive ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"}`;
 
 export default function App() {
   return (
@@ -13,19 +16,16 @@ export default function App() {
               Codelab
             </Link>
 
-            <Link to="/movies" className="text-sm">
-              Movies
-            </Link>
+            <NavLink to="/todos" className={navLinkClass}>
+              Todos
+            </NavLink>
           </div>
         </header>
 
         <main className="mx-auto max-w-7xl px-6 py-8">
           <Routes>
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route
-              path="/movies/:movieId"
-              element={<MoviePage />}
-            />
+            <Route path="/todos" element={<TodosPage />} />
+            <Route path="/todos/:todoId" element={<TodoListPage />} />
           </Routes>
         </main>
       </div>

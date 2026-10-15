@@ -11,12 +11,13 @@ APIs, messaging topics/events, headless tasks, persistence tables, and extension
 | `codelab-movies` | `movies` | `moviesPU` | `com.codelab.movies` | TMDB persistence + resumable Pulsar ingest pipeline. |
 | `codelab-orders` | `orders` | `ordersPU` | `com.codelab.orders` | Order lifecycle CRUD + Debezium CDC -> versioned events pipeline. |
 | `codelab-sample` | `sample` | `samplePU` | `com.codelab.sample` | Tiny reference module for all megalith features. |
+| `codelab-todos` | `todos` | `todosPU` | `com.codelab.todos` | Todo lists + items (deadline per list, notes per item, done/undone toggling). |
 | `codelab-megalith` | n/a (container) | n/a | `com.codelab.megalith` | Running app; per-module wiring; owns infra. |
 
 ## Shared/infrastructure
 
 - All modules share one Postgres server but target **separate logical databases** (`movies`, `orders`,
-  `sample`). There are no cross-module shared tables.
+  `sample`, `todos`). There are no cross-module shared tables.
 - Pulsar is shared infra; modules map to dedicated tenants (`codelab-<module>`) and topics are
   kind-prefixed (`event.<name>` / `job.<name>`) in namespace `local`.
 - Transaction managers are bean-named `<module>.transactionManager` and none is `@Primary`.
@@ -49,6 +50,20 @@ Base paths and service methods:
 
 - No public REST API (ingestion via Pulsar pipeline and headless tasks).
 - `TmdbMovieImportService.persist(MovieDetails) -> boolean` (transactional, `movies.transactionManager`).
+
+### `codelab-todos` (REST)
+
+- `TodoController` -> `/api/todos`
+  - `TodoService.createTodoList(CreateTodoListRequest) -> CreateTodoListResponse` (`POST /api/todos`)
+  - `TodoService.getTodoList(Long) -> GetTodoListResponse` (`GET /api/todos/{id}`, includes items)
+  - `TodoService.listTodoLists() -> List<TodoListSummaryResponse>` (`GET /api/todos`)
+  - `TodoService.addTodoItem(Long, AddTodoItemRequest) -> GetTodoListResponse` (`POST /api/todos/{id}/items`)
+  - `TodoService.updateTodoItem(Long, Long, UpdateTodoItemRequest) -> GetTodoListResponse`
+    (`PUT /api/todos/{id}/items/{itemId}`; partial: description, notes, done)
+  - `TodoService.toggleTodoItem(Long, Long, boolean) -> GetTodoListResponse`
+    (`PATCH /api/todos/{id}/items/{itemId}/done` and `.../undone`)
+- Unknown list/item ids throw `TodoNotFoundException` -> HTTP 404.
+- No auth/user management; lists own their items (`orphanRemoval`, ordered by id).
 
 ## Messaging topics and events
 
@@ -96,6 +111,9 @@ Run via: `cd codelab-megalith && ./gradlew bootRun --args='--codelab.task=<name>
 
 ### `sample` (database)
 - `sample_items`.
+
+### `todos` (database)
+- `todo_lists`, `todo_items` (`todo_items.todo_list_id` FK; cascading delete via `orphanRemoval`).
 
 ## Extension points for new modules
 

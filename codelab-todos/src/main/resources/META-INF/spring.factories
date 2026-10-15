@@ -1,0 +1,2 @@
+com.codelab.common.spring.persistence.CodelabModuleProvider=\
+com.codelab.todos.autoconfigure.TodosModuleProvider
