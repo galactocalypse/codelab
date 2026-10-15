@@ -47,7 +47,7 @@ namespaced to the module, and every physical topic carries a kind prefix — `ev
 (`app.pulsar.events.topic-prefix` / `app.pulsar.jobs.topic-prefix`, applied by `CodelabTopicResolver` on both the
 publish and consume paths, so the two buses are structurally disjoint inside a module's tenant).
 
-There are two buses with different contracts (full design in `../MESSAGE_EVOLUTION.md`):
+There are two buses with different contracts (full design in `../docs/platform/MESSAGE_EVOLUTION.md`):
 
 **Events** — business facts, governed by the business-version contract. Producers are per type, as opposed to per
 queue, mimicking JPA's repository pattern, and every publish mandates a `BusinessVersion`:
@@ -149,7 +149,7 @@ Invocation:
 The abstraction is deliberately narrow: it is for a finite set of named, manually-invoked, one-at-a-time units of
 work that run against the application context — **not** continuous consumers, `@Scheduled` jobs, or request-path
 work (use `CodelabJobConsumer`/`CodelabEventConsumer`, Spring scheduling, or a REST controller respectively). See
-`HEADLESS_ENTRY_POINTS.md` at the repo root for the problem, rationale, and applicability table.
+`../docs/platform/HEADLESS_ENTRY_POINTS.md` for the problem, rationale, and applicability table.
 The application-driven job bus is verified separately by `JobBusEndToEndTest`: it manually publishes through
 the real job-publisher proxy and asserts a real job consumer receives it (jobs are never produced by CDC).
 
