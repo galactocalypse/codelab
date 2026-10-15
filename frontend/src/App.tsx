@@ -1,7 +1,5 @@
 import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
 
-import MoviePage from "@/pages/movies/MoviePage";
-import MoviesPage from "@/pages/movies/MoviesPage";
 import TodoListPage from "@/pages/todos/TodoListPage";
 import TodosPage from "@/pages/todos/TodosPage";
 
@@ -21,10 +19,6 @@ export default function App() {
             <NavLink to="/todos" className={navLinkClass}>
               Todos
             </NavLink>
-
-            <NavLink to="/movies" className={navLinkClass}>
-              Movies
-            </NavLink>
           </div>
         </header>
 
@@ -32,8 +26,6 @@ export default function App() {
           <Routes>
             <Route path="/todos" element={<TodosPage />} />
             <Route path="/todos/:todoId" element={<TodoListPage />} />
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:movieId" element={<MoviePage />} />
           </Routes>
         </main>
       </div>

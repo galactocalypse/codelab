@@ -156,14 +156,26 @@ cd codelab-megalith
 
 ## Frontend
 
-The `frontend/` workspace is a React + Vite + TypeScript app with a **generated** OpenAPI client.
+The `frontend/` workspace is a React + Vite + TypeScript app. A generated OpenAPI client lives in
+`frontend/src/generated` (config: `frontend/openapi-generator.yaml`). The generator reads the live
+spec, so **start the backend first, then regenerate the client before building the frontend** —
+regenerate whenever a backend REST contract changes, and always before a rebuild so the client
+matches the running API.
 
 ```bash
+# terminal 1 — backend must be up so http://localhost:8080/api-docs is available
+cd codelab-megalith && ./gradlew bootRun
+
+# terminal 2
 cd frontend
 npm install
-npm run generate-api   # regenerate the client from the megalith's OpenAPI spec
-npm run dev            # Vite dev server
+npm run generate-api   # regenerate frontend/src/generated from the megalith's OpenAPI spec
+npm run build          # type-check + production bundle into dist/
+npm run dev            # Vite dev server (proxies /api -> :8080)
 ```
+
+> `npm run generate-api` requires the backend on `:8080`. It is a prerequisite for
+> **rebuilding** the frontend, not for running the dev server.
 
 ## Verification
 
